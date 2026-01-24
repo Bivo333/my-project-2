@@ -1,73 +1,54 @@
-body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  background-color: #f9f9f9;
+:root {
+  --main-green: #67a653;
+  --dark-green: #2d4635;
+  --text-color: #333;
+  --light-bg: #f9f9f9;
 }
 
-header {
-  background-color: #2B6CB0;
-  color: white;
-  text-align: center;
-  padding: 20px;
-}
+body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; color: var(--text-color); background: #fff; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
 
-header nav a {
-  color: white;
-  margin: 0 10px;
-  text-decoration: none;
-  font-weight: 500;
-}
+/* Header */
+.top-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--dark-green); }
+.header-contacts { text-align: right; }
+.phone { font-size: 20px; font-weight: bold; }
+.callback-link { color: var(--main-green); text-decoration: none; border-bottom: 1px dashed; font-size: 14px; }
 
-header nav a:hover {
-  text-decoration: underline;
-}
+/* Nav */
+.main-nav { background: var(--main-green); color: white; }
+.nav-wrapper { display: flex; justify-content: space-between; align-items: center; }
+.nav-menu { list-style: none; display: flex; margin: 0; padding: 0; }
+.nav-menu a { color: white; text-decoration: none; padding: 15px 20px; display: block; font-size: 13px; font-weight: 600; }
+.nav-menu a:hover { background: rgba(0,0,0,0.1); }
+.nav-tools { display: flex; align-items: center; gap: 20px; }
+.cart-btn { background: #8bc34a; padding: 10px 15px; cursor: pointer; display: flex; gap: 8px; align-items: center; }
 
-.hero {
-  text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(to right, #2B6CB0, #2C5282);
-  color: white;
-}
+/* Hero */
+.hero-slider { height: 450px; background-size: cover; background-position: center; color: white; display: flex; align-items: center; position: relative; }
+.hero-text h1 { font-size: 40px; margin-bottom: 10px; line-height: 1.1; }
+.btn-primary { background: var(--main-green); color: white; padding: 12px 25px; text-decoration: none; border-radius: 4px; display: inline-block; margin-top: 20px; }
+.slider-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+.dot.active { background: white; }
 
-.btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 25px;
-  background-color: #F6AD55;
-  color: white;
-  font-weight: bold;
-  border-radius: 5px;
-  text-decoration: none;
-}
+/* Grid */
+.catalog-preview { padding: 50px 0; background: #f4f4f4; margin-top: 0; }
+.section-title { text-align: left; font-size: 24px; margin-bottom: 5px; }
+.section-subtitle { color: #666; margin-bottom: 30px; }
+.card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.category-card { background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.card-header { display: flex; gap: 12px; align-items: center; margin-bottom: 15px; }
+.card-icon { color: var(--main-green); font-size: 20px; }
+.card-content { font-size: 13px; color: #777; }
+.check-item { color: var(--main-green); display: flex; gap: 5px; align-items: center; margin-top: 10px; font-weight: bold; }
 
-.btn:hover {
-  background-color: #dd9040;
-}
+/* Footer */
+.main-footer { background: var(--dark-green); color: white; padding: 30px 0; margin-top: 40px; }
+.footer-content { display: flex; justify-content: space-between; align-items: center; }
+.footer-social { font-size: 24px; display: flex; gap: 15px; }
 
-.cards {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 20px;
-}
-
-.card {
-  background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
-  width: 250px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #2B6CB0;
-  color: white;
+@media (max-width: 768px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-menu { display: none; }
 }
