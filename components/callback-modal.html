@@ -1,0 +1,37 @@
+<div id="callback-modal" class="fixed inset-0 bg-black/60 z-[100] hidden backdrop-blur-sm flex items-center justify-center p-4">
+    
+    <div id="modal-content" class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl transform opacity-0 scale-95 transition-all duration-300">
+        
+        <div class="bg-primary-green p-6 flex justify-between items-center">
+            <h3 class="text-white text-xl font-bold uppercase tracking-wider">Обратный звонок</h3>
+            <button id="close-modal" class="text-white/60 hover:text-white transition-colors cursor-pointer bg-transparent border-0 outline-none">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <div class="p-8">
+            <form id="callbackForm" class="space-y-5">
+                <div>
+                    <label for="user-name" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Ваше имя</label>
+                    <input id="user-name" type="text" name="name" placeholder="Имя" required
+                        class="w-full px-5 py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
+                </div>
+                
+                <div>
+                    <label for="user-phone" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Телефон</label>
+                    <input id="user-phone" type="tel" name="phone" placeholder="+7 (___) ___-__-__" required
+                        class="w-full px-5 py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
+                </div>
+
+                <button type="submit" 
+                    class="w-full py-5 bg-gold-accent hover:bg-[#f0ad00] text-dark-green font-bold uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-gold-accent/20 mt-2 cursor-pointer border-0 outline-none active:scale-[0.98]">
+                    Перезвоните пожалуйста
+                </button>
+                
+                <p class="text-[10px] text-center text-gray-400 leading-relaxed px-4">
+                    Нажимая кнопку, вы соглашаетесь с <a href="#" class="underline hover:text-primary-green">политикой конфиденциальности</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>

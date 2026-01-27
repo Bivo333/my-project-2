@@ -25,42 +25,83 @@
 <body class="bg-light-gray">
     <div id="header-top-res"></div>
     <div id="nav-res" class="sticky top-0 z-50"></div>
+    
+    <div id="breadcrumbs-res"></div>
 
     <main class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-black text-dark-green mb-12 uppercase tracking-tighter">Наши работы</h1>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <h1 class="text-4xl font-black text-dark-green uppercase tracking-tighter">Наши работы</h1>
+                    <p class="text-gray-600 mt-2">Реализованные проекты из нашей лиственницы</p>
+                </div>
                 
-                <div class="product-card rounded-2xl overflow-hidden group">
+                <div class="flex flex-wrap gap-2">
+                    <button class="px-5 py-2 rounded-full bg-primary-green text-white text-xs font-black uppercase">Все</button>
+                    <button class="px-5 py-2 rounded-full bg-white text-dark-green text-xs font-black uppercase hover:bg-gold-accent transition-colors">Террасы</button>
+                    <button class="px-5 py-2 rounded-full bg-white text-dark-green text-xs font-black uppercase hover:bg-gold-accent transition-colors">Фасады</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="product-card rounded-3xl overflow-hidden group bg-white">
                     <div class="aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="https://images.unsplash.com/photo-1510629954389-c1e0da47d415?w=600" 
                              alt="Работа 1" 
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                     </div>
                     <div class="p-6">
-                        <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Терраса из лиственницы</h3>
-                        <p class="text-xs text-gray-500 mt-2 font-bold uppercase tracking-widest">Объект: МО, Истра</p>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Терраса (Вельвет)</h3>
+                            <span class="text-gold-accent"><i class="fas fa-star"></i></span>
+                        </div>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest italic">Объект: МО, Истра</p>
                     </div>
                 </div>
 
-                <div class="product-card rounded-2xl overflow-hidden group">
+                <div class="product-card rounded-3xl overflow-hidden group bg-white">
                     <div class="aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="https://images.unsplash.com/photo-1449156001935-d2863fb72690?w=600" 
                              alt="Работа 2" 
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                     </div>
                     <div class="p-6">
-                        <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Фасад (Планкен)</h3>
-                        <p class="text-xs text-gray-500 mt-2 font-bold uppercase tracking-widest">Объект: Тракт-Терминал</p>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Фасад (Планкен)</h3>
+                            <span class="text-gold-accent"><i class="fas fa-star"></i></span>
+                        </div>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest italic">Объект: Тракт-Терминал</p>
                     </div>
                 </div>
 
+                <div class="product-card rounded-3xl overflow-hidden group bg-white">
+                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                        <img src="https://images.unsplash.com/photo-1545042746-db9ba6427331?w=600" 
+                             alt="Работа 3" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Отделка бассейна</h3>
+                            <span class="text-gold-accent"><i class="fas fa-star"></i></span>
+                        </div>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest italic">Объект: КП "Миллениум"</p>
+                    </div>
                 </div>
+
+            </div> <div class="mt-20 text-center bg-white p-12 rounded-[3rem] shadow-xl border border-dashed border-primary-green/30">
+                <h2 class="text-2xl font-black text-dark-green uppercase mb-4">Хотите такую же красоту?</h2>
+                <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Привезем материал того же сорта и качества, который вы видите на этих фотографиях. Срок доставки — от 1 дня.</p>
+                <button class="trigger-callback bg-gold-accent text-dark-green px-10 py-4 rounded-xl font-black uppercase text-sm hover:scale-105 transition-all shadow-lg">
+                    Хочу консультацию
+                </button>
+            </div>
         </div>
     </main>
 
     <div id="footer-res"></div>
+    <div id="callback-modal-res"></div>
     <script src="script.js"></script>
 </body>
 </html>

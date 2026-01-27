@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Доставка и услуги — Moslistva</title>
+    <title>Доставка и оплата — Moslistva</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -14,13 +14,15 @@
 <body class="bg-light-gray">
     <div id="header-top-res"></div>
     <div id="nav-res" class="sticky top-0 z-50"></div>
+    
+    <div id="breadcrumbs-res"></div>
 
     <main class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-black text-dark-green mb-12 uppercase">Доставка и оплата</h1>
+            <h1 class="text-4xl font-black text-dark-green mb-12 uppercase tracking-tight">Доставка и оплата</h1>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-3xl shadow-lg border-b-4 border-gold-accent">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-10 rounded-3xl shadow-lg border-b-4 border-gold-accent transition-transform hover:-translate-y-2">
                     <div class="w-16 h-16 bg-primary-green/10 rounded-2xl flex items-center justify-center mb-6 text-primary-green text-3xl">
                         <i class="fas fa-truck-fast"></i>
                     </div>
@@ -28,7 +30,7 @@
                     <p class="text-gray-600 leading-relaxed">Собственный автопарк. Доставляем по Москве и Московской области в день заказа или на следующий день.</p>
                 </div>
 
-                <div class="bg-white p-10 rounded-3xl shadow-lg border-b-4 border-primary-green">
+                <div class="bg-white p-10 rounded-3xl shadow-lg border-b-4 border-primary-green transition-transform hover:-translate-y-2">
                     <div class="w-16 h-16 bg-primary-green/10 rounded-2xl flex items-center justify-center mb-6 text-primary-green text-3xl">
                         <i class="fas fa-warehouse"></i>
                     </div>
@@ -36,7 +38,7 @@
                     <p class="text-gray-600 leading-relaxed">Вы можете забрать товар самостоятельно с наших складов: ТСК "Тракт-Терминал" или 41-й км МКАД.</p>
                 </div>
 
-                <div class="bg-white p-10 rounded-3xl shadow-lg border-b-4 border-gold-accent">
+                <div class="bg-white p-10 rounded-3xl shadow-lg border-b-4 border-gold-accent transition-transform hover:-translate-y-2">
                     <div class="w-16 h-16 bg-primary-green/10 rounded-2xl flex items-center justify-center mb-6 text-primary-green text-3xl">
                         <i class="fas fa-credit-card"></i>
                     </div>
@@ -44,10 +46,24 @@
                     <p class="text-gray-600 leading-relaxed">Принимаем наличные, оплату картой и безналичный расчет для юридических лиц с НДС.</p>
                 </div>
             </div>
+
+            <div class="bg-dark-green rounded-[2rem] p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h2 class="text-2xl font-bold mb-2">Рассчитать стоимость доставки?</h2>
+                    <p class="opacity-80">Свяжитесь с менеджером для точного расчета логистики до вашего объекта.</p>
+                </div>
+                <button class="trigger-callback mt-6 md:mt-0 relative z-10 bg-gold-accent text-dark-green px-8 py-4 rounded-xl font-black uppercase text-sm hover:scale-105 transition-all">
+                    Уточнить детали
+                </button>
+                <i class="fas fa-map-location-dot absolute right-[-20px] bottom-[-20px] text-[150px] opacity-10 rotate-[-15deg]"></i>
+            </div>
         </div>
     </main>
 
     <div id="footer-res"></div>
+    
+    <div id="callback-modal-res"></div>
+
     <script src="script.js"></script>
 </body>
 </html>

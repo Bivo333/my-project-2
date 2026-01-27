@@ -2,24 +2,30 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <ul class="flex items-center gap-1">
-                <li><a href="index.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">КАТАЛОГ</a></li>
+                <li><a href="catalog-page.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">КАТАЛОГ</a></li>
                 <li><a href="prices.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">ЦЕНЫ</a></li>
-                <li><a href="services.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">ДОСТАВКА</a></li>
+                <li><a href="delivery.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">ДОСТАВКА</a></li>
                 <li><a href="gallery.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">ГАЛЕРЕЯ</a></li>
+                <li><a href="about.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">О КОМПАНИИ</a></li>
                 <li><a href="contacts.html" class="nav-link uppercase text-xs font-black px-5 py-2.5">КОНТАКТЫ</a></li>
             </ul>
 
             <div class="flex items-center gap-8 text-white">
-                <button title="Поиск" class="focus:outline-none">
-                    <i class="fas fa-search cursor-pointer hover:text-gold-accent transition-colors"></i>
+                <button title="Поиск" class="focus:outline-none bg-transparent border-0 p-0">
+                    <i class="fas fa-search text-lg cursor-pointer hover:text-gold-accent transition-colors"></i>
                 </button>
-                <div class="flex items-center gap-3 group cursor-pointer">
+
+                <a href="cart.html" class="flex items-center gap-3 group cursor-pointer no-underline text-white">
                     <div class="relative">
                         <i class="fas fa-shopping-cart text-lg group-hover:text-gold-accent transition-colors"></i>
-                        <span class="absolute -top-2 -right-2 bg-gold-accent text-dark-green text-[10px] font-bold px-1.5 rounded-full">0</span>
+                        <span class="absolute -top-2 -right-2 bg-gold-accent text-dark-green text-[10px] font-bold px-1.5 rounded-full shadow-sm">
+                            0
+                        </span>
                     </div>
-                    <span class="text-sm font-bold group-hover:text-gold-accent transition-colors">0 руб.</span>
-                </div>
+                    <span class="text-sm font-bold group-hover:text-gold-accent transition-colors">
+                        0 руб.
+                    </span>
+                </a>
             </div>
         </div>
     </div>

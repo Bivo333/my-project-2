@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакты — Moslistva</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -25,44 +26,52 @@
 <body class="bg-light-gray">
     <div id="header-top-res"></div>
     <div id="nav-res" class="sticky top-0 z-50"></div>
+    <div id="breadcrumbs-res"></div>
 
-    <main class="py-16">
+    <main class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-black text-dark-green mb-12 uppercase">Контакты</h1>
+            <h1 class="text-4xl font-black text-dark-green mb-12 uppercase tracking-tight">
+                Контакты
+            </h1>
 
             <div class="flex flex-col lg:flex-row gap-12 items-stretch">
                 
                 <div class="lg:w-1/2 flex flex-col gap-8">
-                    <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-gold-accent flex-1 flex flex-col justify-center">
+                    
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-gold-accent flex-1 flex flex-col justify-center transition-transform hover:scale-[1.01]">
                         <h3 class="text-xl font-bold text-primary-green mb-4 uppercase">Магазин (Ярославское ш.)</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             ТСК "Тракт-Терминал"<br>
                             Ярославское шоссе, павильон СП-102
                         </p>
-                        <a href="tel:+79775007879" class="text-2xl font-black text-dark-green hover:text-gold-accent transition-colors">+7 (977) 500-78-79</a>
+                        <a href="tel:+79775007879" class="text-2xl font-black text-dark-green hover:text-gold-accent transition-colors">
+                            +7 (977) 500-78-79
+                        </a>
                     </div>
 
-                    <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-primary-green flex-1 flex flex-col justify-center">
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-primary-green flex-1 flex flex-col justify-center transition-transform hover:scale-[1.01]">
                         <h3 class="text-xl font-bold text-primary-green mb-4 uppercase">Склад (МКАД 41 км)</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             Рынок "Славянский Мир"<br>
                             41-й км МКАД
                         </p>
-                        <a href="tel:+79775007879" class="text-2xl font-black text-dark-green hover:text-gold-accent transition-colors">+7 (977) 500-78-79</a>
+                        <a href="tel:+79775007879" class="text-2xl font-black text-dark-green hover:text-gold-accent transition-colors">
+                            +7 (977) 500-78-79
+                        </a>
                     </div>
 
                     <div class="flex gap-4">
-                        <a href="#" class="bg-[#25D366] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold">
+                        <a href="https://wa.me/79775007879" target="_blank" class="bg-[#25D366] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold shadow-md">
                             <i class="fab fa-whatsapp mr-2"></i> WhatsApp
                         </a>
-                        <a href="#" class="bg-[#0088cc] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold">
+                        <a href="https://t.me/+79775007879" target="_blank" class="bg-[#0088cc] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold shadow-md">
                             <i class="fab fa-telegram mr-2"></i> Telegram
                         </a>
                     </div>
                 </div>
 
                 <div class="lg:w-1/2">
-                    <div class="bg-gray-200 rounded-3xl overflow-hidden shadow-lg h-full min-h-[400px]">
+                    <div class="bg-gray-200 rounded-3xl overflow-hidden shadow-lg h-full min-h-[450px] border border-gray-100">
                         <iframe 
                             src="https://yandex.ru/map-widget/v1/?um=constructor%3Afdbce688fd551af62416d447e82d68f0db2d4d2b11cae54d3ce8b9f93b64ee73&amp;source=constructor" 
                             width="100%" 
@@ -79,6 +88,9 @@
     </main>
 
     <div id="footer-res"></div>
+    
+    <div id="callback-modal-res"></div>
+
     <script src="script.js"></script>
 </body>
 </html>

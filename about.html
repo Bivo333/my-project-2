@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О компании — Moslistva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    colors: { 
+                        'primary-green': '#2D5D42', 
+                        'dark-green': '#1B3022', 
+                        'gold-accent': '#FFB800', 
+                        'light-gray': '#F8F9FA' 
+                    } 
+                } 
+            } 
+        }
+    </script>
+</head>
+<body class="bg-light-gray">
+    <div id="header-top-res"></div>
+    <div id="nav-res" class="sticky top-0 z-50"></div>
+    <div id="breadcrumbs-res"></div>
+
+    <main class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <section class="mb-20">
+                <h1 class="text-4xl font-black text-dark-green mb-8 uppercase tracking-tight">О компании Moslistva</h1>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 text-lg text-gray-700 leading-relaxed">
+                        <p>
+                            <strong class="text-primary-green">Moslistva</strong> — это надежный поставщик высококачественных пиломатериалов из сибирской лиственницы в Москве и Московской области. Мы специализируемся на продукции, которая сочетает в себе природную долговечность и эстетику.
+                        </p>
+                        <p>
+                            Наше производство расположено в экологически чистых регионах, что позволяет нам контролировать весь цикл: от отбора древесины до финальной обработки каждой доски.
+                        </p>
+                        <button class="trigger-callback bg-primary-green text-white px-8 py-3 rounded-xl font-bold hover:bg-dark-green transition-all uppercase text-sm tracking-wider shadow-lg">
+                            Связаться с нами
+                        </button>
+                    </div>
+
+                    <div class="group relative overflow-hidden rounded-[2.5rem] shadow-xl transition-all duration-500 ease-in-out hover:-translate-y-4 hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
+                        <img src="https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?w=800&q=80" 
+                             alt="Производство лиственницы" 
+                             class="w-full h-96 object-cover transition-transform duration-700 ease-in-out group-hover:scale-110">
+                        
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-20">
+                <h2 class="text-3xl font-black text-dark-green mb-10 uppercase text-center">Почему выбирают нас</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border-b-4 border-gold-accent transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl">
+                        <div class="text-gold-accent text-4xl mb-6"><i class="fas fa-tree"></i></div>
+                        <h3 class="text-xl font-bold text-dark-green mb-4">Сибирский лес</h3>
+                        <p class="text-gray-600">Используем только плотную древесину из северных регионов, которая не гниет.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border-b-4 border-primary-green transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl">
+                        <div class="text-primary-green text-4xl mb-6"><i class="fas fa-tools"></i></div>
+                        <h3 class="text-xl font-bold text-dark-green mb-4">Собственный склад</h3>
+                        <p class="text-gray-600">Постоянное наличие всех сортов (Экстра, Прима, АВ) на наших складах.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border-b-4 border-gold-accent transition-all duration-500 ease-out hover:-translate-y-3 hover:shadow-2xl">
+                        <div class="text-gold-accent text-4xl mb-6"><i class="fas fa-truck"></i></div>
+                        <h3 class="text-xl font-bold text-dark-green mb-4">Быстрая доставка</h3>
+                        <p class="text-gray-600">Собственный автопарк позволяет доставлять заказы по Москве и МО в день обращения.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-dark-green rounded-[3rem] p-12 text-white overflow-hidden relative">
+                <div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+                    <i class="fas fa-leaf text-[200px] rotate-45"></i>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
+                    <div>
+                        <div class="text-4xl font-black text-gold-accent mb-2 uppercase">10+</div>
+                        <div class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-60">Лет на рынке</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-black text-gold-accent mb-2 uppercase">5000+</div>
+                        <div class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-60">Заказов в год</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-black text-gold-accent mb-2 uppercase">100%</div>
+                        <div class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-60">Эко-материал</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-black text-gold-accent mb-2 uppercase">2</div>
+                        <div class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-60">Крупных склада</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="footer-res"></div>
+    <div id="callback-modal-res"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
