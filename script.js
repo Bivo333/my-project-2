@@ -88,7 +88,7 @@ function setActiveLink() {
     navLinks.forEach(link => {
         link.classList.remove('active');
         const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === 'catalog-module.html' && href === 'catalog-module.html')) {
+        if (href === currentPage || (currentPage === 'blok-kataloga.html ' && href === 'blok-kataloga.html ')) {
             link.classList.add('active');
         }
     });
@@ -104,12 +104,12 @@ function updateBreadcrumbs() {
 
     const pageTitles = {
         'index.html': 'Главная',
-        'catalog.html': 'Каталог',
-        'prices.html': 'Цены',
-        'gallery.html': 'Галерея',
-        'delivery.html': 'Доставка',
-        'about.html': 'О компании',
-        'contacts.html': 'Контакты'
+        'katalog.html ': 'Каталог',
+        'ceny.html ': 'Цены',
+        'nashi-raboty.html ': 'Галерея',
+        'dostavka-i-oplata.html ': 'Доставка',
+        'o-kompanii.html ': 'О компании',
+        'kontakty.html ': 'Контакты'
     };
 
     let currentPage = window.location.pathname.split("/").pop() || 'index.html';
@@ -173,10 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadComponent('nav-res', 'components/nav.html');
     loadComponent('breadcrumbs-res', 'components/breadcrumbs.html');
     loadComponent('footer-res', 'components/footer.html');
-    loadComponent('callback-modal-res', 'components/callback-modal.html');
+    loadComponent('callback-modal-res', 'components/zakaz-zvonka.html ');
 
     if (document.getElementById('catalog-res')) {
-        loadComponent('catalog-res', 'components/catalog-module.html');
+        loadComponent('catalog-res', 'components/blok-kataloga.html ');
     }
 
     if (!document.querySelector('script[src*="inputmask"]')) {
