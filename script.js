@@ -60,7 +60,6 @@ async function loadComponent(id, url) {
         const html = await response.text();
         element.innerHTML = html;
 
-        // Инициализация после загрузки
         if (id === 'nav-res') {
             setActiveLink();
             initMobileMenu();
@@ -87,7 +86,8 @@ function setActiveLink() {
     navLinks.forEach(link => {
         link.classList.remove('active');
         const href = link.getAttribute('href');
-        if (href === currentPage) {
+        // Очищаем href от возможных пробелов для точного сравнения
+        if (href && href.trim() === currentPage) {
             link.classList.add('active');
         }
     });
@@ -108,10 +108,7 @@ function updateBreadcrumbs() {
         'nashi-raboty.html': 'Галерея',
         'dostavka-i-oplata.html': 'Доставка',
         'o-kompanii.html': 'О компании',
-        'kontakty.html': 'Контакты',
-        'politika-konfidencialnosti.html': 'Политика конфиденциальности',
-        'politika-obrabotki-cookie.html': 'Политика обработки cookie',
-        'soglasie-na-reklamu.html': 'Согласие на получение рекламы'
+        'kontakty.html': 'Контакты'
     };
 
     let currentPage = window.location.pathname.split("/").pop() || 'index.html';
@@ -126,7 +123,7 @@ function updateBreadcrumbs() {
 }
 
 /**
- * 6. ЛОГИКА МОДАЛЬНОГО ОКНА (С ПОДДЕРЖКОЙ ЗАКАЗА ТОВАРА)
+ * 6. ЛОГИКА МОДАЛЬНОГО ОКНА
  */
 function openCallbackModal(productName = null) {
     const modal = document.getElementById('callback-modal');
@@ -136,10 +133,13 @@ function openCallbackModal(productName = null) {
 
     if (!modal || !content) return;
 
-    // Если передан productName, меняем заголовок и скрытое поле
-    if (productName && productName.length > 1) {
-        if (titleElement) titleElement.innerText = 'Заказать: ' + productName;
-        if (subjectInput) subjectInput.value = 'Заказ товара: ' + productName;
+    if (productName && productName.trim().length > 0) {
+        let cleanName = productName.trim();
+        // Красивый регистр
+        cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
+
+        if (titleElement) titleElement.innerText = 'Заказать: ' + cleanName;
+        if (subjectInput) subjectInput.value = 'Заказ товара: ' + cleanName;
     } else {
         if (titleElement) titleElement.innerText = 'Заказать звонок';
         if (subjectInput) subjectInput.value = 'Обратный звонок';
@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadComponent('catalog-res', 'components/blok-kataloga.html');
     }
 
-    // Подгрузка скрипта маски, если его еще нет
     if (!document.querySelector('script[src*="inputmask"]')) {
         const maskScript = document.createElement('script');
         maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
@@ -207,46 +206,45 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 document.addEventListener('click', (e) => {
     
-    // 9.1 Модальное окно (Заказать звонок / Товар)
+    // 9.1 Модальное окно
     const trigger = e.target.closest('.trigger-callback');
     if (trigger) {
         const isMobile = window.innerWidth <= 768;
         const isPhoneLink = trigger.tagName === 'A' && trigger.getAttribute('href')?.startsWith('tel:');
 
-        // На ПК открываем всегда. На мобилке — только если это НЕ ссылка "tel:"
         if (!isMobile || (isMobile && !isPhoneLink)) {
             e.preventDefault();
-
             let productName = '';
 
-            try {
-                // Пытаемся найти название:
-                // 1. Для Мобильной Версии (ищем h3 внутри блока товара)
-                const mobileParent = trigger.closest('.p-5');
-                const h3Title = mobileParent?.querySelector('h3');
-
-                // 2. Для ПК версии (ищем в первой ячейке строки)
-                const desktopRow = trigger.closest('tr');
-                const tdTitle = desktopRow?.querySelector('td:first-child');
-
-                if (h3Title) {
-                    productName = h3Title.innerText.trim();
-                } else if (tdTitle) {
-                    productName = tdTitle.innerText.trim();
+            const row = trigger.closest('tr');
+            if (row) {
+                // 1. Ищем заголовок с colspan выше по таблице (для первой таблицы)
+                let prevRow = row.previousElementSibling;
+                while (prevRow) {
+                    const headerCell = prevRow.querySelector('td[colspan]');
+                    if (headerCell) {
+                        productName = headerCell.innerText.trim();
+                        break;
+                    }
+                    prevRow = prevRow.previousElementSibling;
                 }
 
-                // Если в названии только цифры или размеры (например "20х40"), 
-                // ищем заголовок h3 над таблицей
-                if (productName.match(/^\d/) || productName.includes('х')) {
-                    const tableSection = trigger.closest('.mb-12') || trigger.closest('section');
-                    const sectionTitle = tableSection?.querySelector('h2, h3');
-                    if (sectionTitle) productName = sectionTitle.innerText.trim();
+                // 2. Если не нашли выше, проверяем первую ячейку строки (для второй таблицы)
+                if (!productName) {
+                    const firstCell = row.querySelector('td:first-child');
+                    if (firstCell && firstCell.innerText.trim().length > 1) {
+                        productName = firstCell.innerText.trim();
+                    }
                 }
-            } catch (err) {
-                console.warn("Не удалось определить название товара:", err);
             }
 
-            // Вызываем модалку (если productName пустой, сработает заголовок по умолчанию)
+            // 3. Логика для мобильных карточек (H3)
+            if (!productName) {
+                const card = trigger.closest('.p-5') || trigger.closest('section');
+                const h3Title = card?.querySelector('h3');
+                if (h3Title) productName = h3Title.innerText.trim();
+            }
+
             openCallbackModal(productName);
         }
     }
