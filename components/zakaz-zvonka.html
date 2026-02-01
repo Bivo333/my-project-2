@@ -1,55 +1,57 @@
 <div id="callback-modal" class="fixed inset-0 bg-black/60 z-[100] hidden backdrop-blur-sm flex items-center justify-center p-4">
-    
     <div id="modal-content" class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl transform opacity-0 scale-95 transition-all duration-300">
         
         <div class="bg-primary-green p-4 md:p-6 flex justify-center items-center relative">
-            <h3 class="text-white text-xl font-bold tracking-wider text-center">Заказать звонок</h3>
-            <button id="close-modal" class="absolute right-6 text-white/60 hover:text-white transition-colors cursor-pointer bg-transparent border-0 outline-none">
+            <h3 class="text-white text-lg md:text-xl font-bold tracking-wider text-center">Заказать звонок</h3>
+            <button id="close-modal" type="button" class="absolute right-4 md:right-6 text-white/60 hover:text-white transition-colors cursor-pointer bg-transparent border-0 outline-none">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
 
         <div class="p-5 md:p-8">
-            <form id="callbackForm" class="space-y-4 md:space-y-5">
+            <form id="callbackForm" class="space-y-3 md:space-y-5">
                 <input type="hidden" id="form-subject" name="subject" value="Обратный звонок">
 
                 <div>
-                    <label for="user-name" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Ваше имя</label>
+                    <label for="user-name" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-1.5 ml-1">Ваше имя</label>
                     <input id="user-name" type="text" name="name" placeholder="Имя" required
-                        class="w-full px-5 py-3 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
+                        class="w-full px-5 py-2.5 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
                 </div>
                 
-                <div>
-                    <label for="user-phone" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Телефон</label>
+                <div id="phone-field-wrapper">
+                    <label for="user-phone" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-1.5 ml-1">Телефон</label>
                     <input id="user-phone" type="tel" name="phone" placeholder="+7 (___) ___-__-__" required
-                        class="w-full px-5 py-3 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
+                        class="w-full px-5 py-2.5 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
                 </div>
 
-                <div id="extra-fields" class="hidden space-y-4">
+                <div id="extra-fields" class="hidden space-y-3 md:space-y-5">
                     <div>
-                        <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Ваш Email</label>
+                        <label for="user-email" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-1.5 ml-1">Ваш Email</label>
                         <input id="user-email" type="email" name="email" placeholder="example@mail.ru"
-                            class="w-full px-5 py-3 bg-gray-50 rounded-xl border border-gray-100 outline-none focus:border-primary-green transition-all text-gray-700">
+                            class="w-full px-5 py-2.5 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Сообщение</label>
+                        <label for="user-message" class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-1.5 ml-1">Сообщение</label>
                         <textarea id="user-message" name="message" placeholder="Ваш вопрос..." rows="3"
-                            class="w-full px-5 py-3 bg-gray-50 rounded-xl border border-gray-100 outline-none focus:border-primary-green transition-all text-gray-700 resize-none"></textarea>
+                            class="w-full px-5 py-2.5 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300 resize-none"></textarea>
                     </div>
                 </div>
 
-                <div class="space-y-3 md:space-y-4 pt-1 md:pt-2">
+                <div class="space-y-2.5 pt-1">
                     <label class="flex items-start gap-3 cursor-pointer group">
-                        <input type="checkbox" required class="mt-1 w-4 h-4 accent-primary-green rounded border-gray-200">
-                        <span class="text-[11px] text-gray-500 leading-tight group-hover:text-gray-700 transition-colors">
-                            Согласен с обработкой моих персональных данных в соответствии с <a href="politika-konfidencialnosti.html" class="underline font-bold hover:text-primary-green">политикой конфиденциальности</a>
+                        <input type="checkbox" required class="mt-0.5 w-4 h-4 accent-primary-green shrink-0">
+                        <span class="text-[11px] text-gray-500 leading-tight">
+                            Согласен с обработкой моих персональных данных в соответствии с 
+                            <a href="politika-konfidencialnosti.html" class="inline font-bold hover:text-primary-green underline decoration-gray-300">политикой конфиденциальности</a>
                         </span>
                     </label>
-
+                
                     <label class="flex items-start gap-3 cursor-pointer group">
-                        <input type="checkbox" class="mt-1 w-4 h-4 accent-primary-green rounded border-gray-200">
-                        <span class="text-[11px] text-gray-500 leading-tight group-hover:text-gray-700 transition-colors">
-                            Даю <a href="soglasie-na-reklamu.html" class="underline font-bold hover:text-primary-green">согласие на получение информационных и маркетинговых рассылок</a> (вы в любой момент можете отказаться от получения писем, перейдя по ссылке отписки в письме) и использование <a href="politika-obrabotki-cookie.html" class="underline font-bold hover:text-primary-green">файлов cookie</a>
+                        <input type="checkbox" class="mt-0.5 w-4 h-4 accent-primary-green shrink-0">
+                        <span class="text-[11px] text-gray-500 leading-tight">
+                            Даю <a href="soglasie-na-reklamu.html" class="inline font-bold hover:text-primary-green underline decoration-gray-300">согласие на получение информационных и маркетинговых рассылок</a> 
+                            (вы в любой момент можете отказаться от получения писем, перейдя по ссылке отписки в письме) и использование 
+                            <a href="politika-obrabotki-cookie.html" class="inline font-bold hover:text-primary-green underline decoration-gray-300">файлов cookie</a>
                         </span>
                     </label>
                 </div>

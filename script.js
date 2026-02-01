@@ -140,19 +140,31 @@ function openCallbackModal(productName = null, isEmailMode = false) {
     const titleElement = modal?.querySelector('h3');
     const subjectInput = document.getElementById('form-subject');
     
-    // Новая строка: находим блок с доп. полями
+    // Элементы управления полями
     const extraFields = document.getElementById('extra-fields');
+    const phoneField = document.getElementById('phone-field-wrapper');
+    const emailInput = document.getElementById('user-email');
+    const phoneInput = document.getElementById('user-phone');
 
     if (!modal || !content) return;
 
-    // ЛОГИКА ОТОБРАЖЕНИЯ ПОЛЕЙ
-    if (isEmailMode && extraFields) {
-        extraFields.classList.remove('hidden');
+    // Сброс формы перед открытием
+    document.getElementById('callbackForm')?.reset();
+
+    // Настройка режима (Email или Телефон)
+    if (isEmailMode) {
+        extraFields?.classList.remove('hidden');
+        phoneField?.classList.add('hidden');
         if (titleElement) titleElement.innerText = 'Написать нам';
-        if (subjectInput) subjectInput.value = 'Сообщение на Email';
+        if (subjectInput) subjectInput.value = 'Письмо с сайта (Email)';
+        if (emailInput) emailInput.required = true;
+        if (phoneInput) phoneInput.required = false;
     } else {
-        if (extraFields) extraFields.classList.add('hidden');
-        
+        extraFields?.classList.add('hidden');
+        phoneField?.classList.remove('hidden');
+        if (phoneInput) phoneInput.required = true;
+        if (emailInput) emailInput.required = false;
+
         if (productName && productName.trim().length > 0) {
             let cleanName = productName.trim();
             cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
@@ -164,6 +176,7 @@ function openCallbackModal(productName = null, isEmailMode = false) {
         }
     }
 
+    // Анимация открытия
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
@@ -171,10 +184,12 @@ function openCallbackModal(productName = null, isEmailMode = false) {
     setTimeout(() => {
         content.classList.replace('scale-95', 'scale-100');
         content.classList.replace('opacity-0', 'opacity-100');
+        
+        /// ВСЕГДА ставим фокус на имя первым делом
+        document.getElementById('user-name')?.focus();
     }, 10);
 }
 
-// Функция закрытия остается БЕЗ ИЗМЕНЕНИЙ (она у тебя рабочая)
 function closeCallbackModal() {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
@@ -182,6 +197,7 @@ function closeCallbackModal() {
 
     content.classList.replace('scale-100', 'scale-95');
     content.classList.replace('opacity-100', 'opacity-0');
+    
     setTimeout(() => {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
