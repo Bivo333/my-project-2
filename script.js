@@ -5,19 +5,17 @@ function animateCart() {
     const cartBtn = document.getElementById('cart-button');
     if (!cartBtn) return;
     
-    // Сброс анимации для повторного срабатывания
     cartBtn.classList.remove('cart-animate');
-    void cartBtn.offsetWidth; // Магия: принудительный пересчет стилей (reflow)
+    void cartBtn.offsetWidth; // Force reflow
     cartBtn.classList.add('cart-animate');
     
-    // Удаляем класс после завершения (0.5с как в CSS)
     setTimeout(() => {
         cartBtn.classList.remove('cart-animate');
     }, 500);
 }
 
 /**
- * 2. МОБИЛЬНОЕ МЕНЮ (Логика)
+ * 2. МОБИЛЬНОЕ МЕНЮ
  */
 function initMobileMenu() {
     const btn = document.getElementById('mobile-menu-btn');
@@ -62,6 +60,7 @@ async function loadComponent(id, url) {
         const html = await response.text();
         element.innerHTML = html;
 
+        // Инициализация после загрузки
         if (id === 'nav-res') {
             setActiveLink();
             initMobileMenu();
@@ -88,7 +87,7 @@ function setActiveLink() {
     navLinks.forEach(link => {
         link.classList.remove('active');
         const href = link.getAttribute('href');
-        if (href === currentPage || (currentPage === 'blok-kataloga.html ' && href === 'blok-kataloga.html ')) {
+        if (href === currentPage) {
             link.classList.add('active');
         }
     });
@@ -110,14 +109,13 @@ function updateBreadcrumbs() {
         'dostavka-i-oplata.html': 'Доставка',
         'o-kompanii.html': 'О компании',
         'kontakty.html': 'Контакты',
-        // Добавляем новые страницы
         'politika-konfidencialnosti.html': 'Политика конфиденциальности',
         'politika-obrabotki-cookie.html': 'Политика обработки cookie',
         'soglasie-na-reklamu.html': 'Согласие на получение рекламы'
     };
 
     let currentPage = window.location.pathname.split("/").pop() || 'index.html';
-    currentPage = currentPage.split('?')[0].trim(); // trim() уберет случайные пробелы
+    currentPage = currentPage.split('?')[0].trim();
 
     if (currentPage === 'index.html') {
         breadcrumbContainer.classList.add('hidden');
@@ -128,12 +126,24 @@ function updateBreadcrumbs() {
 }
 
 /**
- * 6. МОДАЛЬНОЕ ОКНО
+ * 6. ЛОГИКА МОДАЛЬНОГО ОКНА (С ПОДДЕРЖКОЙ ЗАКАЗА ТОВАРА)
  */
-function openCallbackModal() {
+function openCallbackModal(productName = null) {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
+    const titleElement = modal?.querySelector('h3');
+    const subjectInput = document.getElementById('form-subject');
+
     if (!modal || !content) return;
+
+    // Если передан productName, меняем заголовок и скрытое поле
+    if (productName && productName.length > 1) {
+        if (titleElement) titleElement.innerText = 'Заказать: ' + productName;
+        if (subjectInput) subjectInput.value = 'Заказ товара: ' + productName;
+    } else {
+        if (titleElement) titleElement.innerText = 'Заказать звонок';
+        if (subjectInput) subjectInput.value = 'Обратный звонок';
+    }
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
@@ -170,19 +180,20 @@ function initPhoneMask() {
 }
 
 /**
- * 8. ИНИЦИАЛИЗАЦИЯ
+ * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
  */
 document.addEventListener('DOMContentLoaded', () => {
     loadComponent('header-top-res', 'components/header.html');
     loadComponent('nav-res', 'components/nav.html');
     loadComponent('breadcrumbs-res', 'components/breadcrumbs.html');
     loadComponent('footer-res', 'components/footer.html');
-    loadComponent('callback-modal-res', 'components/zakaz-zvonka.html ');
+    loadComponent('callback-modal-res', 'components/zakaz-zvonka.html');
 
     if (document.getElementById('catalog-res')) {
-        loadComponent('catalog-res', 'components/blok-kataloga.html ');
+        loadComponent('catalog-res', 'components/blok-kataloga.html');
     }
 
+    // Подгрузка скрипта маски, если его еще нет
     if (!document.querySelector('script[src*="inputmask"]')) {
         const maskScript = document.createElement('script');
         maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
@@ -195,7 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
  * 9. ГЛОБАЛЬНЫЙ ОБРАБОТЧИК КЛИКОВ
  */
 document.addEventListener('click', (e) => {
-    // 9.1 Модальное окно (Заказать звонок / Телефон)
+    
+    // 9.1 Модальное окно (Заказать звонок / Товар)
     const trigger = e.target.closest('.trigger-callback');
     if (trigger) {
         const isMobile = window.innerWidth <= 768;
@@ -204,12 +216,42 @@ document.addEventListener('click', (e) => {
         // На ПК открываем всегда. На мобилке — только если это НЕ ссылка "tel:"
         if (!isMobile || (isMobile && !isPhoneLink)) {
             e.preventDefault();
-            openCallbackModal();
+
+            let productName = '';
+
+            try {
+                // Пытаемся найти название:
+                // 1. Для Мобильной Версии (ищем h3 внутри блока товара)
+                const mobileParent = trigger.closest('.p-5');
+                const h3Title = mobileParent?.querySelector('h3');
+
+                // 2. Для ПК версии (ищем в первой ячейке строки)
+                const desktopRow = trigger.closest('tr');
+                const tdTitle = desktopRow?.querySelector('td:first-child');
+
+                if (h3Title) {
+                    productName = h3Title.innerText.trim();
+                } else if (tdTitle) {
+                    productName = tdTitle.innerText.trim();
+                }
+
+                // Если в названии только цифры или размеры (например "20х40"), 
+                // ищем заголовок h3 над таблицей
+                if (productName.match(/^\d/) || productName.includes('х')) {
+                    const tableSection = trigger.closest('.mb-12') || trigger.closest('section');
+                    const sectionTitle = tableSection?.querySelector('h2, h3');
+                    if (sectionTitle) productName = sectionTitle.innerText.trim();
+                }
+            } catch (err) {
+                console.warn("Не удалось определить название товара:", err);
+            }
+
+            // Вызываем модалку (если productName пустой, сработает заголовок по умолчанию)
+            openCallbackModal(productName);
         }
     }
 
-    // 9.2 Анимация корзины при клике на "В корзину"
-    // Сработает на любой кнопке с классом .buy-btn или если внутри текст "корзину"
+    // 9.2 Анимация корзины
     const buyBtn = e.target.closest('.buy-btn') || (e.target.closest('button') && e.target.innerText.toLowerCase().includes('корзину'));
     if (buyBtn) {
         animateCart();
