@@ -25,6 +25,19 @@
                         class="w-full px-5 py-3 md:py-4 bg-gray-50 rounded-xl border border-gray-100 focus:border-primary-green focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder:text-gray-300">
                 </div>
 
+                <div id="extra-fields" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Ваш Email</label>
+                        <input id="user-email" type="email" name="email" placeholder="example@mail.ru"
+                            class="w-full px-5 py-3 bg-gray-50 rounded-xl border border-gray-100 outline-none focus:border-primary-green transition-all text-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400 mb-2 ml-1">Сообщение</label>
+                        <textarea id="user-message" name="message" placeholder="Ваш вопрос..." rows="3"
+                            class="w-full px-5 py-3 bg-gray-50 rounded-xl border border-gray-100 outline-none focus:border-primary-green transition-all text-gray-700 resize-none"></textarea>
+                    </div>
+                </div>
+
                 <div class="space-y-3 md:space-y-4 pt-1 md:pt-2">
                     <label class="flex items-start gap-3 cursor-pointer group">
                         <input type="checkbox" required class="mt-1 w-4 h-4 accent-primary-green rounded border-gray-200">

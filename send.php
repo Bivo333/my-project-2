@@ -1,44 +1,70 @@
 <?php
-// --- НАСТРОЙКИ ---
-$token = "ВАШ_ТОКЕН_БОТА";
-$chat_id = "ВАШ_ID";
+// ==========================================
+// НАСТРОЙКИ (ВАШИ ДАННЫЕ УЖЕ ВСТАВЛЕНЫ)
+// ==========================================
+$token = "8562372197:AAExSEMR-Ff8X35tU4-j9YbTrv-zSryWPXc"; 
+$chat_id = "-5035486829"; 
 $admin_email = "moslistva@yandex.ru";
-$subject_site = "Новая заявка с сайта Moslistva.ru";
 
-// --- СБОР ДАННЫХ ---
-$name = strip_tags($_POST['name']);
-$phone = strip_tags($_POST['phone']);
-$subject = strip_tags($_POST['subject']); // Название товара
+// ==========================================
+// ОБРАБОТКА ДАННЫХ ИЗ ФОРМЫ
+// ==========================================
+// Получаем данные и очищаем их от лишних пробелов и тегов
+$name = strip_tags(trim($_POST['name'] ?? 'Не указано'));
+$phone = strip_tags(trim($_POST['phone'] ?? 'Не указано'));
+$subject = strip_tags(trim($_POST['subject'] ?? 'Заявка с сайта'));
 
-// --- 1. ОТПРАВКА В TELEGRAM ---
-$arr = array(
-  '📦 Заказ:' => $subject,
-  '👤 Имя:' => $name,
-  '📞 Телефон:' => $phone
-);
+// Подготовка ссылки для кнопки вызова (только цифры и плюс)
+$phone_link = preg_replace('/[^0-9+]/', '', $phone);
 
-foreach($arr as $key => $value) {
-  $txt .= "<b>".$key."</b> ".$value."%0A";
-};
+// Формируем красивый текст для Telegram
+$txt = "<b>🚀 Новая заявка с Moslistva.ru</b>%0A%0A";
+$txt .= "<b>📦 Тема:</b> " . $subject . "%0A";
+$txt .= "<b>👤 Имя:</b> " . $name . "%0A";
+$txt .= "<b>📞 Тел:</b> <code>" . $phone . "</code>";
 
-$sendToTelegram = fopen("https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chat_id}&parse_mode=html&text={$txt}","r");
+// Создаем кнопку «Позвонить» под сообщением
+$keyboard = json_encode([
+    'inline_keyboard' => [
+        [
+            ['text' => '📞 Позвонить клиенту', 'url' => 'tel:' . $phone_link]
+        ]
+    ]
+]);
 
-// --- 2. ОТПРАВКА НА ПОЧТУ ---
-$message = "Данные заявки:\n\n";
-$message .= "Заказ: " . $subject . "\n";
-$message .= "Имя: " . $name . "\n";
-$message .= "Телефон: " . $phone . "\n";
+// ==========================================
+// ОТПРАВКА В TELEGRAM
+// ==========================================
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot{$token}/sendMessage");
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, [
+    'chat_id' => $chat_id,
+    'parse_mode' => 'html',
+    'text' => urldecode($txt),
+    'reply_markup' => $keyboard
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$result = curl_exec($ch);
+curl_close($ch);
 
-$headers = "From: info@moslistva.ru\r\n"; // Укажите почту вашего домена (желательно)
+// ==========================================
+// ОТПРАВКА НА ПОЧТУ (РЕЗЕРВ)
+// ==========================================
+$mail_body = "Новая заявка на сайте:\n\n";
+$mail_body .= "Тема: $subject\n";
+$mail_body .= "Имя: $name\n";
+$mail_body .= "Телефон: $phone\n";
+
+$headers = "From: info@moslistva.ru\r\n";
 $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
 
-$sendToEmail = mail($admin_email, $subject_site, $message, $headers);
+@mail($admin_email, "Заявка: $subject", $mail_body, $headers);
 
-// --- ОТВЕТ ДЛЯ JS ---
-// Мы считаем отправку успешной, если сработал хотя бы Telegram
-if ($sendToTelegram) {
-  echo "success";
+// Отдаем ответ скрипту на сайте
+if ($result) {
+    echo "success";
 } else {
-  echo "error";
+    echo "error";
 }
 ?>

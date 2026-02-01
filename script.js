@@ -134,24 +134,34 @@ function updateBreadcrumbs() {
 /**
  * 6. ЛОГИКА МОДАЛЬНОГО ОКНА
  */
-function openCallbackModal(productName = null) {
+function openCallbackModal(productName = null, isEmailMode = false) {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
     const titleElement = modal?.querySelector('h3');
     const subjectInput = document.getElementById('form-subject');
+    
+    // Новая строка: находим блок с доп. полями
+    const extraFields = document.getElementById('extra-fields');
 
     if (!modal || !content) return;
 
-    if (productName && productName.trim().length > 0) {
-        let cleanName = productName.trim();
-        // Красивый регистр
-        cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
-
-        if (titleElement) titleElement.innerText = 'Заказать: ' + cleanName;
-        if (subjectInput) subjectInput.value = 'Заказ товара: ' + cleanName;
+    // ЛОГИКА ОТОБРАЖЕНИЯ ПОЛЕЙ
+    if (isEmailMode && extraFields) {
+        extraFields.classList.remove('hidden');
+        if (titleElement) titleElement.innerText = 'Написать нам';
+        if (subjectInput) subjectInput.value = 'Сообщение на Email';
     } else {
-        if (titleElement) titleElement.innerText = 'Заказать звонок';
-        if (subjectInput) subjectInput.value = 'Обратный звонок';
+        if (extraFields) extraFields.classList.add('hidden');
+        
+        if (productName && productName.trim().length > 0) {
+            let cleanName = productName.trim();
+            cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
+            if (titleElement) titleElement.innerText = 'Заказать: ' + cleanName;
+            if (subjectInput) subjectInput.value = 'Заказ товара: ' + cleanName;
+        } else {
+            if (titleElement) titleElement.innerText = 'Заказать звонок';
+            if (subjectInput) subjectInput.value = 'Обратный звонок';
+        }
     }
 
     modal.classList.remove('hidden');
@@ -164,6 +174,7 @@ function openCallbackModal(productName = null) {
     }, 10);
 }
 
+// Функция закрытия остается БЕЗ ИЗМЕНЕНИЙ (она у тебя рабочая)
 function closeCallbackModal() {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
