@@ -355,46 +355,44 @@ document.addEventListener('submit', async (e) => {
         }
     }
 
-    /**
- * 11. ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ (ЧАТ / ЗВОНОК)
- */
-function switchMode(mode) {
-    const btnChat = document.getElementById('btn-chat');
-    const btnCall = document.getElementById('btn-call');
+    function switchFormMode(mode) {
+        const btnChat = document.getElementById('btn-chat');
+        const btnCall = document.getElementById('btn-call');
+        const phoneWrap = document.getElementById('phone-field-wrapper');
+        const extraFields = document.getElementById('extra-fields');
+        const subject = document.getElementById('form-subject');
     
-    // Если кнопки еще не загружены, выходим
-    if (!btnChat || !btnCall) return;
-
-    const chatIcon = btnChat.querySelector('i');
-    const chatText = btnChat.querySelector('span');
-    const callIcon = btnCall.querySelector('i');
-    const callText = btnCall.querySelector('span');
-
-    if (mode === 'chat') {
-        // --- ЧАТ АКТИВЕН (Серый) ---
-        btnChat.className = "flex-1 py-2.5 px-2 bg-gray-200 rounded-xl flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
-        if(chatIcon) chatIcon.className = "fas fa-comments text-gray-600 text-xs transition-colors";
-        if(chatText) chatText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-700 transition-colors";
-
-        // --- ЗВОНОК ПАССИВЕН (Белый) ---
-        btnCall.className = "flex-1 py-2.5 px-2 bg-white rounded-xl shadow-sm flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
-        if(callIcon) callIcon.className = "fas fa-phone-alt text-gray-300 text-xs transition-colors";
-        if(callText) callText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-400 transition-colors";
-        
-        // Открываем Jivo только если нажали на чат
-        if (window.jivo_api) { jivo_api.open(); }
-
-    } else if (mode === 'call') {
-        // --- ЗВОНОК АКТИВЕН (Серый) ---
-        btnCall.className = "flex-1 py-2.5 px-2 bg-gray-200 rounded-xl flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
-        if(callIcon) callIcon.className = "fas fa-phone-alt text-gray-600 text-xs transition-colors";
-        if(callText) callText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-700 transition-colors";
-
-        // --- ЧАТ ПАССИВЕН (Белый) ---
-        btnChat.className = "flex-1 py-2.5 px-2 bg-white rounded-xl shadow-sm flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
-        if(chatIcon) chatIcon.className = "fas fa-comments text-gray-300 text-xs transition-colors";
-        if(chatText) chatText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-400 transition-colors";
+        if (mode === 'chat') {
+            // Показываем поля чата, скрываем телефон
+            phoneWrap.classList.add('hidden');
+            extraFields.classList.remove('hidden');
+            subject.value = "Письмо из чата";
+    
+            // Кнопка Чат -> Активная (Белая)
+            btnChat.className = "flex-1 py-2.5 px-2 bg-white shadow-sm rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
+            btnChat.querySelector('i').className = "fas fa-comments text-primary-green text-sm";
+            btnChat.querySelector('span').className = "text-[9px] font-bold uppercase tracking-wider text-primary-green";
+    
+            // Кнопка Звонок -> Пассивная (Серая)
+            btnCall.className = "flex-1 py-2.5 px-2 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
+            btnCall.querySelector('i').className = "fas fa-phone-alt text-gray-400 group-hover:text-primary-green text-sm";
+            btnCall.querySelector('span').className = "text-[9px] font-bold uppercase tracking-wider text-gray-500";
+        } else {
+            // Показываем телефон, скрываем чат
+            phoneWrap.classList.remove('hidden');
+            extraFields.classList.add('hidden');
+            subject.value = "Обратный звонок";
+    
+            // Кнопка Звонок -> Активная (Белая)
+            btnCall.className = "flex-1 py-2.5 px-2 bg-white shadow-sm rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
+            btnCall.querySelector('i').className = "fas fa-phone-alt text-primary-green text-sm";
+            btnCall.querySelector('span').className = "text-[9px] font-bold uppercase tracking-wider text-primary-green";
+    
+            // Кнопка Чат -> Пассивная (Серая)
+            btnChat.className = "flex-1 py-2.5 px-2 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
+            btnChat.querySelector('i').className = "fas fa-comments text-gray-400 group-hover:text-primary-green text-sm";
+            btnChat.querySelector('span').className = "text-[9px] font-bold uppercase tracking-wider text-gray-500";
+        }
     }
-}
 
 });
