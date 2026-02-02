@@ -135,12 +135,16 @@ function updateBreadcrumbs() {
  * 6. ЛОГИКА МОДАЛЬНОГО ОКНА
  */
 function openCallbackModal(productName = null, isEmailMode = false) {
+    // Сбрасываем кнопки: Чат активен (серый), Звонок неактивен (белый)
+    if (typeof switchMode === 'function') {
+        switchMode('chat');
+    }
+
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
     const titleElement = modal?.querySelector('h3');
     const subjectInput = document.getElementById('form-subject');
     
-    // Элементы управления полями
     const extraFields = document.getElementById('extra-fields');
     const phoneField = document.getElementById('phone-field-wrapper');
     const emailInput = document.getElementById('user-email');
@@ -148,10 +152,8 @@ function openCallbackModal(productName = null, isEmailMode = false) {
 
     if (!modal || !content) return;
 
-    // Сброс формы перед открытием
     document.getElementById('callbackForm')?.reset();
 
-    // Настройка режима (Email или Телефон)
     if (isEmailMode) {
         extraFields?.classList.remove('hidden');
         phoneField?.classList.add('hidden');
@@ -176,7 +178,6 @@ function openCallbackModal(productName = null, isEmailMode = false) {
         }
     }
 
-    // Анимация открытия
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
@@ -184,8 +185,6 @@ function openCallbackModal(productName = null, isEmailMode = false) {
     setTimeout(() => {
         content.classList.replace('scale-95', 'scale-100');
         content.classList.replace('opacity-0', 'opacity-100');
-        
-        /// ВСЕГДА ставим фокус на имя первым делом
         document.getElementById('user-name')?.focus();
     }, 10);
 }
@@ -194,6 +193,11 @@ function closeCallbackModal() {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
     if (!modal || !content) return;
+
+    // Сбрасываем визуальное состояние кнопок к "Чату" перед закрытием
+    if (typeof switchMode === 'function') {
+        switchMode('chat');
+    }
 
     content.classList.replace('scale-100', 'scale-95');
     content.classList.replace('opacity-100', 'opacity-0');
@@ -350,5 +354,47 @@ document.addEventListener('submit', async (e) => {
             btn.innerText = originalBtnText;
         }
     }
+
+    /**
+ * 11. ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ (ЧАТ / ЗВОНОК)
+ */
+function switchMode(mode) {
+    const btnChat = document.getElementById('btn-chat');
+    const btnCall = document.getElementById('btn-call');
+    
+    // Если кнопки еще не загружены, выходим
+    if (!btnChat || !btnCall) return;
+
+    const chatIcon = btnChat.querySelector('i');
+    const chatText = btnChat.querySelector('span');
+    const callIcon = btnCall.querySelector('i');
+    const callText = btnCall.querySelector('span');
+
+    if (mode === 'chat') {
+        // --- ЧАТ АКТИВЕН (Серый) ---
+        btnChat.className = "flex-1 py-2.5 px-2 bg-gray-200 rounded-xl flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
+        if(chatIcon) chatIcon.className = "fas fa-comments text-gray-600 text-xs transition-colors";
+        if(chatText) chatText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-700 transition-colors";
+
+        // --- ЗВОНОК ПАССИВЕН (Белый) ---
+        btnCall.className = "flex-1 py-2.5 px-2 bg-white rounded-xl shadow-sm flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
+        if(callIcon) callIcon.className = "fas fa-phone-alt text-gray-300 text-xs transition-colors";
+        if(callText) callText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-400 transition-colors";
+        
+        // Открываем Jivo только если нажали на чат
+        if (window.jivo_api) { jivo_api.open(); }
+
+    } else if (mode === 'call') {
+        // --- ЗВОНОК АКТИВЕН (Серый) ---
+        btnCall.className = "flex-1 py-2.5 px-2 bg-gray-200 rounded-xl flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
+        if(callIcon) callIcon.className = "fas fa-phone-alt text-gray-600 text-xs transition-colors";
+        if(callText) callText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-700 transition-colors";
+
+        // --- ЧАТ ПАССИВЕН (Белый) ---
+        btnChat.className = "flex-1 py-2.5 px-2 bg-white rounded-xl shadow-sm flex items-center justify-center gap-2 border-0 outline-none cursor-pointer transition-all";
+        if(chatIcon) chatIcon.className = "fas fa-comments text-gray-300 text-xs transition-colors";
+        if(chatText) chatText.className = "text-[9px] font-bold uppercase tracking-wider text-gray-400 transition-colors";
+    }
+}
 
 });
