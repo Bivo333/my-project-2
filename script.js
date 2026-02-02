@@ -125,21 +125,25 @@ async function loadComponent(id, url) {
     if (!element) return;
 
     try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Ошибка загрузки: ${url}`);
-        const html = await response.text();
-        element.innerHTML = html;
-
-        if (id === 'nav-res') {
-            setActiveLink();
-            initMobileMenu();
-        }
-        if (id === 'callback-modal-res') {
-            initPhoneMask();
-        }
-        if (id === 'breadcrumbs-res') {
-            updateBreadcrumbs();
-        }
+        // ДОБАВЬ RETURN ЗДЕСЬ, чтобы работало .then()
+        return fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error(`Ошибка загрузки: ${url}`);
+                return response.text();
+            })
+            .then(html => {
+                element.innerHTML = html;
+                if (id === 'nav-res') {
+                    setActiveLink();
+                    initMobileMenu();
+                }
+                if (id === 'callback-modal-res') {
+                    initPhoneMask();
+                }
+                if (id === 'breadcrumbs-res') {
+                    updateBreadcrumbs();
+                }
+            });
     } catch (error) {
         console.error(`Ошибка компонента #${id}:`, error);
     }
@@ -266,6 +270,7 @@ function initPhoneMask() {
  * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Загружаем обычные компоненты
     loadComponent('header-top-res', 'components/header.html');
     loadComponent('nav-res', 'components/nav.html');
     loadComponent('breadcrumbs-res', 'components/breadcrumbs.html');
@@ -276,6 +281,31 @@ document.addEventListener('DOMContentLoaded', () => {
         loadComponent('catalog-res', 'components/blok-kataloga.html');
     }
 
+    // 2. ЗАГРУЖАЕМ СЛАЙДЕР И ИНИЦИАЛИЗИРУЕМ ЕГО
+    loadComponent('hero-slider-res', 'components/hero-slider.html').then(() => {
+        // Этот код сработает только когда HTML слайдера уже на странице
+        if (document.querySelector('.myHeroSwiper')) {
+            new Swiper(".myHeroSwiper", {
+                loop: true,
+                speed: 1200, 
+                grabCursor: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+            });
+        }
+    });
+
+    // Маска телефона
     if (!document.querySelector('script[src*="inputmask"]')) {
         const maskScript = document.createElement('script');
         maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";

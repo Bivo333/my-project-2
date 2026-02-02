@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>МосЛиства — Пиломатериалы из лиственницы</title>
-    <link rel="icon" type="/image/png" href="/images/ui/logo.png">
+    <link rel="icon" type="/image/png" href="/images/ui/logo.webp">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script>
@@ -17,6 +19,7 @@
                         'primary-green': '#2D5D42',
                         'dark-green': '#1B3022',
                         'gold-accent': '#FFB800',
+                        'gold-hover': '#E6A700', // Чуть темнее для эффекта нажатия
                         'light-gray': '#F8F9FA',
                     }
                 }
@@ -32,27 +35,8 @@
     <div id="breadcrumbs-res"></div>
 
     <main>
-        <section class="relative min-h-[500px] md:h-[550px] bg-cover bg-center flex items-center md:items-end"
-            style="background-image: linear-gradient(rgba(27,48,34,0.5), rgba(27,48,34,0.3)), url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80');">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 text-white">
-                <div class="max-w-4xl">
-                    <h1
-                        class="text-3xl sm:text-4xl md:text-5xl font-black mb-4 md:mb-6 leading-tight text-white drop-shadow-md">
-                        Купить палубную доску, планкен, вагонку из лиственницы в Москве и МО
-                    </h1>
-
-                    <p class="text-lg md:text-xl mb-8 md:mb-10 font-medium text-white/90 leading-snug">
-                        Собственное производство, премиальное качество и быстрая доставка по всему региону
-                    </p>
-
-                    <a href="katalog.html "
-                        class="block w-full md:inline-block md:w-auto text-center bg-gold-accent text-dark-green px-8 py-4 md:px-10 md:py-5 rounded-xl font-black uppercase text-sm shadow-xl transition-all md:hover:scale-105 active:scale-95">
-                        Смотреть каталог
-                    </a>
-                </div>
-            </div>
-        </section>
-
+        <div id="hero-slider-res"></div>
+    
         <div id="catalog-res"></div>
     </main>
 
