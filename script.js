@@ -287,7 +287,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.querySelector('.myHeroSwiper')) {
             new Swiper(".myHeroSwiper", {
                 loop: true,
-                speed: 1200, 
+                speed: 1200,
+                // 2. Чувствительность к движению пальца. 
+                // 1 — стандарт. Поставь 1.5 или 2, чтобы слайд улетал от легкого касания.
+                touchRatio: 1.5,
+                // 3. Сопротивление (при значении 0 слайд переключается мгновенно)
+                touchAngle: 45, // Чтобы слайд не дергался, если ты листаешь страницу вниз
+                // 4. Убираем задержку после касания
+                shortSwipes: true,
+                longSwipes: false, // Отключает медленное дотягивание слайда
                 grabCursor: true,
                 autoplay: {
                     delay: 5000,
