@@ -460,10 +460,18 @@ if (document.readyState === 'loading') {
  * 12. ИНИЦИАЛИЗАЦИЯ ПРОСМОТРА КАРТИНОК (FANCYBOX)
  */
 Fancybox.bind("[data-fancybox]", {
-    // Настройки слайдера
+    // Эта функция проверяет, виден ли элемент на странице
+    // Если карточка скрыта (hidden), Fancybox пропустит её при листовке
+    filter: (instance, slide) => {
+        const el = slide.triggerEl;
+        // Проверяем, не скрыт ли сам элемент или его родители
+        return el.offsetParent !== null;
+    },
+
+    // Твои настройки интерфейса
     Hash: false,
     Thumbs: {
-        autoStart: false, // Миниатюры внизу (выключены по умолчанию)
+        autoStart: false,
     },
     Toolbar: {
         display: {
@@ -472,6 +480,18 @@ Fancybox.bind("[data-fancybox]", {
             right: ["iterateZoom", "slideshow", "fullScreen", "download", "thumbs", "close"],
         },
     },
-    // Анимация открытия
+
+    // Настройки для мобильных (скорость и свайпы)
+    Carousel: {
+        friction: 0.8, // Скорость анимации (меньше = быстрее)
+    },
+
+    // Настройки тача (закрытие свайпом вниз/вверх)
+    Images: {
+        Panzoom: {
+            maxScale: 3,
+        },
+    },
+
     showClass: "f-fadeIn",
 });
