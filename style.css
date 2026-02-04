@@ -230,14 +230,3 @@ body.overflow-hidden {
         display: none !important;
     }
 }
-
-/* Курсор при наведении на картинку в галерее */
-[data-fancybox="gallery"] {
-    cursor: zoom-in; /* Стандартная лупа с плюсом */
-}
-
-/* Опционально: можно сделать кастомный курсор-иконку, если хочешь что-то необычное */
-.product-card .aspect-\[4\/3\]:hover {
-    box-shadow: inset 0 0 0 2px #FFB800; /* Подсветка рамки при наведении */
-    transition: all 0.3s ease;
-}
