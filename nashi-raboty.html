@@ -7,7 +7,14 @@
     <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Курсор-лупа при наведении на картинки */
+        [data-fancybox] { cursor: zoom-in; }
+    </style>
     <script>
         tailwind.config = { 
             theme: { 
@@ -48,9 +55,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="terrasa">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/terrasa-1.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/terrasa-1.webp" alt="Работа 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Терраса</h3>
@@ -61,9 +68,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="fasad">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/fasad-1.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/fasad-1.webp" alt="Работа 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Фасад (Планкен)</h3>
@@ -74,9 +81,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="zabor">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/zabor-1.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/zabor-1.webp" alt="Работа 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Забор</h3>
@@ -87,9 +94,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="terrasa">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/terrasa-2.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/terrasa-2.webp" alt="Работа 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Терраса</h3>
@@ -100,9 +107,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="fasad">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/fasad-2.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/fasad-2.webp" alt="Работа 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Фасад (Планкен)</h3>
@@ -113,9 +120,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="zabor">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/zabor-2.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/zabor-2.webp" alt="Работа 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Забор</h3>
@@ -126,9 +133,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="terrasa">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/terrasa-3.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/terrasa-3.webp" alt="Работа 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Терраса</h3>
@@ -139,9 +146,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="fasad">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/fasad-3.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/fasad-3.webp" alt="Работа 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Фасад (Планкен)</h3>
@@ -152,9 +159,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="zabor">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/zabor-3.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/zabor-3.webp" alt="Работа 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Забор</h3>
@@ -165,9 +172,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="terrasa">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/terrasa-4.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/terrasa-4.webp" alt="Работа 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Терраса (Вельвет)</h3>
@@ -178,9 +185,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="fasad">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/fasad-4.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/fasad-4.webp" alt="Работа 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Фасад (Планкен)</h3>
@@ -191,9 +198,9 @@
                 </div>
 
                 <div class="product-card rounded-3xl overflow-hidden group bg-white shadow-md" data-category="zabor">
-                    <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                    <a href="/images/catalog/zabor-4.webp" data-fancybox="gallery" class="block aspect-[4/3] overflow-hidden bg-gray-200">
                         <img src="/images/catalog/zabor-4.webp" alt="Работа 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </div>
+                    </a>
                     <div class="p-6 text-center md:text-left">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight">Забор</h3>
@@ -218,6 +225,13 @@
 
     <div id="footer-res"></div>
     <div id="callback-modal-res"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        // Активируем слайдер
+        Fancybox.bind("[data-fancybox]", {});
+    </script>
+    
     <script src="script.js"></script>
 </body>
 </html>

@@ -457,3 +457,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ждем микропаузу, чтобы все компоненты (если они есть) успели вставиться в DOM
     setTimeout(initGalleryFilter, 100);
 });
+
+/**
+ * 12. ИНИЦИАЛИЗАЦИЯ ПРОСМОТРА КАРТИНОК (FANCYBOX)
+ */
+Fancybox.bind("[data-fancybox]", {
+    // Настройки слайдера
+    Hash: false,
+    Thumbs: {
+        autoStart: false, // Миниатюры внизу (выключены по умолчанию)
+    },
+    Toolbar: {
+        display: {
+            left: ["infobar"],
+            middle: [],
+            right: ["iterateZoom", "slideshow", "fullScreen", "download", "thumbs", "close"],
+        },
+    },
+    // Анимация открытия
+    showClass: "f-fadeIn",
+});
