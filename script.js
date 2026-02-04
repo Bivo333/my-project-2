@@ -184,7 +184,8 @@ function updateBreadcrumbs() {
         'nashi-raboty.html': 'Галерея',
         'dostavka-i-oplata.html': 'Доставка',
         'o-kompanii.html': 'О компании',
-        'kontakty.html': 'Контакты'
+        'kontakty.html': 'Контакты',
+        '404.html': 'Ошибка 404'
     };
 
     let currentPage = window.location.pathname.split("/").pop() || 'index.html';
