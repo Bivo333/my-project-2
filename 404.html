@@ -30,94 +30,33 @@
     <div id="nav-res" class="sticky top-0 z-50"></div>
     <div id="breadcrumbs-res"></div>
 
-    <main class="flex-grow py-12 md:py-16 bg-light-gray">
+    <main class="flex-grow py-8 md:py-12 bg-light-gray">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <section class="mb-12">
-                <h1 class="text-3xl md:text-4xl font-black text-gray-900 mb-6 uppercase tracking-tight">
+    
+            <section class="mb-6">
+                <h1 class="text-3xl md:text-4xl font-black text-gray-900 mb-4 uppercase tracking-tight">
                     Извините страница не найдена
                 </h1>
-                <p class="text-gray-700 text-base md:text-lg mb-8 max-w-4xl">
+                <p class="text-gray-700 text-sm md:text-base mb-6 max-w-4xl">
                     Ошибка 404. Извините Вы перешли на несуществующую страницу, попробуйте воспользоваться формой поиска или выберите нужный раздел из каталога ниже.
                 </p>
-
-                <form action="/katalog.html" method="GET" class="flex max-w-3xl shadow-sm rounded-xl overflow-hidden border border-gray-200 focus-within:border-primary-green transition-all bg-white">
-                    <input type="text" name="search" placeholder="Поиск..." class="flex-grow px-6 py-4 outline-none text-gray-600 italic">
-                    <button type="submit" class="bg-primary-green text-white px-10 py-4 font-bold uppercase text-sm hover:bg-dark-green transition-colors">
+    
+                <form action="/katalog.html" method="GET"
+                    class="flex max-w-3xl shadow-sm rounded-xl overflow-hidden border border-gray-200 focus-within:border-primary-green transition-all bg-white">
+                    <input type="text" name="search" placeholder="Поиск..."
+                        class="flex-grow px-6 py-4 outline-none text-gray-600 italic">
+                    <button type="submit"
+                        class="bg-primary-green text-white px-10 py-4 font-bold uppercase text-sm hover:bg-dark-green transition-colors">
                         Поиск
                     </button>
                 </form>
             </section>
-
-            <section>
-                <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-10 uppercase tracking-tighter">
-                    Пиломатериалы в наличии
-                </h2>
-                
-                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                    
-                    <a href="katalog.html?cat=paluba" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-border-all text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Палубная доска</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=planken" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-grip-lines text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Планкен</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=pol" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-th text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Доска пола</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=vagonka" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-align-justify text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Вагонка</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=brus-imit" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-layer-group text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Имитация бруса</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=pilo" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-cube text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Пиломатериалы</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=pogonazh" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-angle-right text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Погонаж</h3>
-                    </a>
-
-                    <a href="katalog.html?cat=krepezh" class="bg-white rounded-2xl p-6 group border-2 border-gold-accent/5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-                        <div class="w-12 h-12 bg-primary-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-green transition-colors">
-                            <i class="fas fa-tools text-primary-green text-xl group-hover:text-white"></i>
-                        </div>
-                        <h3 class="text-xs md:text-sm font-black text-gray-800 uppercase tracking-tight">Крепёж</h3>
-                    </a>
-
-                </div>
-
-                <p class="mt-12 text-gray-600 text-sm md:text-base leading-relaxed max-w-6xl">
-                    Весь товар соответствует нормам ГОСТов, имеет сертификаты соответствия и удостоверения качества. Доска сухая, отвечает требованиям сортности, идет точно в размер. Параметры пиломатериалов соответствуют указанным в прайсе.
-                </p>
-            </section>
+    
+            <div id="catalog-sm-res"></div>
+    
+            <p class="mt-1 text-gray-600 text-xs md:text-sm leading-relaxed max-w-6xl">
+                Стройте один раз и навсегда.<br> Бескомпромиссное качество северного леса
+            </p>
         </div>
     </main>
 

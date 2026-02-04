@@ -278,8 +278,14 @@ document.addEventListener('DOMContentLoaded', () => {
     loadComponent('footer-res', 'components/footer.html');
     loadComponent('callback-modal-res', 'components/zakaz-zvonka.html');
 
+    // 2. Большой каталог (для страницы каталога)
     if (document.getElementById('catalog-res')) {
         loadComponent('catalog-res', 'components/blok-kataloga.html');
+    }
+
+    // 3. Компактный каталог (для Главной и 404)
+    if (document.getElementById('catalog-sm-res')) {
+        loadComponent('catalog-sm-res', 'components/blok-kataloga-sm.html');
     }
 
     // 2. ЗАГРУЖАЕМ СЛАЙДЕР И ИНИЦИАЛИЗИРУЕМ ЕГО
