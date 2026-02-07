@@ -188,17 +188,47 @@ function updateBreadcrumbs() {
         'politika-konfidencialnosti.html': 'Политика конфиденциальности',
         'politika-obrabotki-cookie.html': 'Политика обработки файлов cookie',
         'soglasie-na-reklamu.html': 'Согласие на рекламу',
-        '404.html': 'Ошибка 404'
+        '404.html': 'Ошибка 404',
+        // Страницы каталога
+        'doska-pola.html': 'Доска пола',
+        'imitaciya-brusa.html': 'Имитация бруса',
+        'krepezh.html': 'Крепеж',
+        'palubnaya-doska.html': 'Палубная доска',
+        'pilomaterialy.html': 'Пиломатериалы',
+        'planken.html': 'Планкен',
+        'pogonazh.html': 'Погонаж',
+        'vagonka.html': 'Вагонка'
     };
 
-    let currentPage = window.location.pathname.split("/").pop() || 'index.html';
+    const fullPath = window.location.pathname;
+    let currentPage = fullPath.split("/").pop() || 'index.html';
     currentPage = currentPage.split('?')[0].trim();
 
     if (currentPage === 'index.html') {
         breadcrumbContainer.classList.add('hidden');
     } else {
         breadcrumbContainer.classList.remove('hidden');
+        
+        // 1. Устанавливаем текст текущей страницы
         breadcrumbLabel.innerText = pageTitles[currentPage] || 'Страница';
+
+        // 2. Убираем старые динамические ссылки
+        const oldDynamic = breadcrumbContainer.querySelectorAll('.dynamic-link');
+        oldDynamic.forEach(el => el.remove());
+
+        // 3. Логика вложенности: добавляем "Каталог >" перед названием
+        if (fullPath.includes('/catalog/') && currentPage !== 'katalog.html') {
+            const catalogLink = document.createElement('span');
+            catalogLink.className = 'dynamic-link flex items-center'; // Добавил flex для выравнивания
+            
+            // ИСПРАВЛЕНО: Теперь классы иконки 1 в 1 как в твоем HTML
+            catalogLink.innerHTML = `
+                <a href="/katalog.html" class="text-gray-400 hover:text-primary-green transition-colors">Каталог</a>
+                <i class="fas fa-chevron-right text-[11px] text-gray-300 transform translate-y-[1.5px] mx-2"></i>
+            `;
+            
+            breadcrumbLabel.before(catalogLink);
+        }
     }
 }
 
