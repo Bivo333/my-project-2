@@ -125,14 +125,16 @@ async function loadComponent(id, url) {
     if (!element) return;
 
     try {
-        // ДОБАВЬ RETURN ЗДЕСЬ, чтобы работало .then()
-        return fetch(url)
+        // Добавляем return, чтобы функция возвращала промис
+        return fetch(url) 
             .then(response => {
                 if (!response.ok) throw new Error(`Ошибка загрузки: ${url}`);
                 return response.text();
             })
             .then(html => {
                 element.innerHTML = html;
+                
+                // Внутренняя логика после вставки HTML
                 if (id === 'nav-res') {
                     setActiveLink();
                     initMobileMenu();
@@ -153,15 +155,30 @@ async function loadComponent(id, url) {
  * 4. ПОДСВЕТКА АКТИВНОЙ ССЫЛКИ
  */
 function setActiveLink() {
-    let currentPage = window.location.pathname.split("/").pop() || 'index.html';
-    currentPage = currentPage.split('?')[0]; 
+    // 1. Получаем текущий путь (например, /katalog.html или /catalog/vagonka.html)
+    const currentPath = window.location.pathname;
+    
+    // 2. Извлекаем имя файла (например, "vagonka.html")
+    let currentPage = currentPath.split("/").pop() || 'index.html';
+    currentPage = currentPage.split('?')[0].trim();
+
     const navLinks = document.querySelectorAll('.nav-link, #mobile-menu-dropdown a');
 
     navLinks.forEach(link => {
         link.classList.remove('active', 'text-gold-accent');
+        
         const href = link.getAttribute('href');
-        if (href && href.trim() === currentPage) {
+        if (!href) return;
+
+        // 3. Очищаем href от начального слэша для сравнения (чтобы "/ceny.html" стал "ceny.html")
+        const cleanHref = href.startsWith('/') ? href.substring(1) : href;
+
+        // ПРОВЕРКА:
+        // Если имя файла совпадает ИЛИ если мы на главной и ссылка ведет на index.html
+        if (cleanHref === currentPage || (currentPath === '/' && cleanHref === 'index.html')) {
             link.classList.add('active');
+            
+            // Дополнительная подсветка для мобильного меню
             if (link.closest('#mobile-menu-dropdown')) {
                 link.classList.add('text-gold-accent');
             }
@@ -201,10 +218,12 @@ function updateBreadcrumbs() {
     };
 
     const fullPath = window.location.pathname;
+    // Улучшенное извлечение имени файла
     let currentPage = fullPath.split("/").pop() || 'index.html';
     currentPage = currentPage.split('?')[0].trim();
 
-    if (currentPage === 'index.html') {
+    // Скрываем на главной (корень или index.html)
+    if (currentPage === 'index.html' || fullPath === '/') {
         breadcrumbContainer.classList.add('hidden');
     } else {
         breadcrumbContainer.classList.remove('hidden');
@@ -212,16 +231,17 @@ function updateBreadcrumbs() {
         // 1. Устанавливаем текст текущей страницы
         breadcrumbLabel.innerText = pageTitles[currentPage] || 'Страница';
 
-        // 2. Убираем старые динамические ссылки
+        // 2. Убираем старые динамические ссылки, чтобы они не дублировались при повторном вызове
         const oldDynamic = breadcrumbContainer.querySelectorAll('.dynamic-link');
         oldDynamic.forEach(el => el.remove());
 
-        // 3. Логика вложенности: добавляем "Каталог >" перед названием
+        // 3. Логика вложенности
+        // Проверяем вхождение папки /catalog/ в пути
         if (fullPath.includes('/catalog/') && currentPage !== 'katalog.html') {
             const catalogLink = document.createElement('span');
-            catalogLink.className = 'dynamic-link flex items-center'; // Добавил flex для выравнивания
+            catalogLink.className = 'dynamic-link flex items-center'; 
             
-            // ИСПРАВЛЕНО: Теперь классы иконки 1 в 1 как в твоем HTML
+            // Ссылка на каталог теперь всегда абсолютная (от корня)
             catalogLink.innerHTML = `
                 <a href="/katalog.html" class="text-gray-400 hover:text-primary-green transition-colors">Каталог</a>
                 <i class="fas fa-chevron-right text-[11px] text-gray-300 transform translate-y-[1.5px] mx-2"></i>
@@ -249,14 +269,25 @@ function openCallbackModal(productName = null, isEmailMode = false) {
     // ПУНКТ 1: Если передан товар, ставим заголовок "Заказать: Товар"
     if (productName && productName.trim().length > 0) {
         let cleanName = productName.trim();
+        // Делаем первую букву заглавной, остальные строчными
         cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
-        if (titleElement) titleElement.innerText = 'Заказать: ' + cleanName;
-        if (subjectInput) subjectInput.value = 'Заказ товара: ' + cleanName;
+        
+        if (titleElement) {
+            // ИСПРАВЛЕНО: замещаем скобку на перенос строки + скобку
+            // Используем innerHTML вместо innerText
+            const formattedTitle = cleanName.replace('(', '<br>(');
+            titleElement.innerHTML = 'Заказать: ' + formattedTitle;
+        }
+        
+        if (subjectInput) {
+            // В тему письма пишем чистый текст без тега <br>
+            subjectInput.value = 'Заказ товара: ' + cleanName;
+        }
     } 
     // ПУНКТ 2 и 3: Если товара нет, ставим базовый заголовок в зависимости от кнопки
     else {
         if (titleElement) {
-            titleElement.innerText = isEmailMode ? 'Написать нам' : 'Заказать звонок';
+            titleElement.innerHTML = isEmailMode ? 'Написать нам' : 'Заказать звонок';
         }
     }
 
@@ -304,38 +335,38 @@ function initPhoneMask() {
  * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Загружаем обычные компоненты
-    loadComponent('header-top-res', 'components/header.html');
-    loadComponent('nav-res', 'components/nav.html');
-    loadComponent('breadcrumbs-res', 'components/breadcrumbs.html');
-    loadComponent('footer-res', 'components/footer.html');
-    loadComponent('callback-modal-res', 'components/zakaz-zvonka.html');
+    // 1. Загружаем обычные компоненты (ДОБАВЛЕН "/" В НАЧАЛЕ ПУТЕЙ)
+    loadComponent('header-top-res', '/components/header.html');
+    loadComponent('nav-res', '/components/nav.html');
+    loadComponent('breadcrumbs-res', '/components/breadcrumbs.html');
+    loadComponent('footer-res', '/components/footer.html');
+    loadComponent('callback-modal-res', '/components/zakaz-zvonka.html');
 
-    // 2. Большой каталог (для страницы каталога)
+    // 2. Большой каталог
     if (document.getElementById('catalog-res')) {
-        loadComponent('catalog-res', 'components/blok-kataloga.html');
+        // ИСПРАВЛЕНО: Теперь фильтр инициализируется ТОЛЬКО после загрузки HTML каталога
+        loadComponent('catalog-res', '/components/blok-kataloga.html').then(() => {
+            if (typeof initGalleryFilter === 'function') {
+                initGalleryFilter();
+            }
+        });
     }
 
-    // 3. Компактный каталог (для Главной и 404)
+    // 3. Компактный каталог
     if (document.getElementById('catalog-sm-res')) {
-        loadComponent('catalog-sm-res', 'components/blok-kataloga-sm.html');
+        loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html');
     }
 
-    // 2. ЗАГРУЖАЕМ СЛАЙДЕР И ИНИЦИАЛИЗИРУЕМ ЕГО
-    loadComponent('hero-slider-res', 'components/hero-slider.html').then(() => {
-        // Этот код сработает только когда HTML слайдера уже на странице
-        if (document.querySelector('.myHeroSwiper')) {
+    // 4. ЗАГРУЖАЕМ СЛАЙДЕР (ДОБАВЛЕН "/")
+    loadComponent('hero-slider-res', '/components/hero-slider.html').then(() => {
+        if (typeof Swiper !== 'undefined' && document.querySelector('.myHeroSwiper')) {
             new Swiper(".myHeroSwiper", {
                 loop: true,
                 speed: 1200,
-                // 2. Чувствительность к движению пальца. 
-                // 1 — стандарт. Поставь 1.5 или 2, чтобы слайд улетал от легкого касания.
                 touchRatio: 2,
-                // 3. Сопротивление (при значении 0 слайд переключается мгновенно)
-                touchAngle: 45, // Чтобы слайд не дергался, если ты листаешь страницу вниз
-                // 4. Убираем задержку после касания
+                touchAngle: 45,
                 shortSwipes: true,
-                longSwipes: false, // Отключает медленное дотягивание слайда
+                longSwipes: false,
                 grabCursor: true,
                 autoplay: {
                     delay: 5000,
@@ -374,6 +405,8 @@ document.addEventListener('click', (e) => {
         if (!isMobile || (isMobile && !isPhoneLink)) {
             e.preventDefault();
             let productName = '';
+
+            // 1. Поиск в таблице (твоя логика)
             const row = trigger.closest('tr');
             if (row) {
                 let prevRow = row.previousElementSibling;
@@ -392,20 +425,31 @@ document.addEventListener('click', (e) => {
                     }
                 }
             }
+
+            // 2. Поиск в карточке (h3)
             if (!productName) {
                 const card = trigger.closest('.p-5') || trigger.closest('section');
                 const h3Title = card?.querySelector('h3');
                 if (h3Title) productName = h3Title.innerText.trim();
             }
+
+            // 3. ИСПРАВЛЕНИЕ: Поиск в заголовке страницы (H1), если остальное не сработало
+            if (!productName) {
+                const pageTitle = document.querySelector('h1');
+                if (pageTitle) productName = pageTitle.innerText.trim();
+            }
+
             openCallbackModal(productName);
         }
     }
 
+    // Обработка кнопки "В корзину"
     const buyBtn = e.target.closest('.buy-btn') || (e.target.closest('button') && e.target.innerText.toLowerCase().includes('корзину'));
     if (buyBtn) {
         animateCart();
     }
 
+    // Закрытие модального окна
     const modal = document.getElementById('callback-modal');
     if (modal && (e.target.closest('#close-modal') || e.target === modal)) {
         closeCallbackModal();
@@ -427,7 +471,8 @@ document.addEventListener('submit', async (e) => {
             btn.disabled = true;
             btn.innerText = 'ОТПРАВКА...';
 
-            const response = await fetch('send.php', {
+            // ИСПРАВЛЕНО: добавлен "/" перед названием файла
+            const response = await fetch('/send.php', {
                 method: 'POST',
                 body: formData
             });
@@ -462,13 +507,9 @@ function initGalleryFilter() {
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // 1. Убираем класс active у всех кнопок
             filterButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // 2. Добавляем класс active нажатой кнопке
             button.classList.add('active');
 
-            // 3. Логика фильтрации карточек и Fancybox
             const filterValue = button.getAttribute('data-filter');
             
             cards.forEach(card => {
@@ -477,11 +518,9 @@ function initGalleryFilter() {
                 
                 if (filterValue === 'all' || category === filterValue) {
                     card.classList.remove('hidden');
-                    // Если карточка видна, возвращаем ей участие в основной галерее
                     if (link) link.setAttribute('data-fancybox', 'gallery');
                 } else {
                     card.classList.add('hidden');
-                    // Если карточка скрыта, меняем имя группы, чтобы Fancybox её игнорировал
                     if (link) link.setAttribute('data-fancybox', 'hidden');
                 }
             });
@@ -489,36 +528,30 @@ function initGalleryFilter() {
     });
 }
 
-// Инициализация
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGalleryFilter);
-} else {
-    initGalleryFilter();
+/**
+ * 12. ИНИЦИАЛИЗАЦИЯ FANCYBOX
+ */
+function initFancybox() {
+    if (typeof Fancybox !== "undefined") {
+        // Отвязываем старые события, если они были, чтобы не дублировать
+        Fancybox.unbind('[data-fancybox="gallery"]');
+        Fancybox.bind('[data-fancybox="gallery"]', {
+            Hash: false,
+            Thumbs: { autoStart: false },
+            Toolbar: {
+                display: {
+                    left: ["infobar"],
+                    right: ["iterateZoom", "slideshow", "fullScreen", "download", "thumbs", "close"],
+                },
+            },
+            Carousel: { friction: 0.8 },
+            Images: { Panzoom: { maxScale: 3 } },
+        });
+    }
 }
 
-/**
- * 12. ИНИЦИАЛИЗАЦИЯ ПРОСМОТРА КАРТИНОК (FANCYBOX)
- */
-// Привязываемся только к тем элементам, у которых группа "gallery"
-Fancybox.bind('[data-fancybox="gallery"]', {
-    Hash: false,
-    Thumbs: {
-        autoStart: false,
-    },
-    Toolbar: {
-        display: {
-            left: ["infobar"],
-            middle: [],
-            right: ["iterateZoom", "slideshow", "fullScreen", "download", "thumbs", "close"],
-        },
-    },
-    Carousel: {
-        friction: 0.8,
-    },
-    Images: {
-        Panzoom: {
-            maxScale: 3,
-        },
-    },
-    showClass: "f-fadeIn",
+// Запуск при прямой загрузке страницы (если контент не динамический)
+document.addEventListener('DOMContentLoaded', () => {
+    initGalleryFilter();
+    initFancybox();
 });
