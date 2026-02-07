@@ -152,33 +152,37 @@ async function loadComponent(id, url) {
 }
 
 /**
- * 4. ПОДСВЕТКА АКТИВНОЙ ССЫЛКИ
+ * 4. ПОДСВЕТКА АКТИВНОЙ ССЫЛКИ (ФИНАЛЬНЫЙ ФИКС)
  */
 function setActiveLink() {
-    // 1. Получаем текущий путь (например, /katalog.html или /catalog/vagonka.html)
     const currentPath = window.location.pathname;
     
-    // 2. Извлекаем имя файла (например, "vagonka.html")
-    let currentPage = currentPath.split("/").pop() || 'index.html';
-    currentPage = currentPage.split('?')[0].trim();
-
+    // Собираем все ссылки: и из десктопного меню (.nav-link), и из мобильного
     const navLinks = document.querySelectorAll('.nav-link, #mobile-menu-dropdown a');
 
     navLinks.forEach(link => {
-        link.classList.remove('active', 'text-gold-accent');
-        
+        // Очищаем старые стили
+        link.classList.remove('active', 'text-gold-accent', 'text-white');
+        link.classList.add('text-white/70'); // Базовый цвет (полупрозрачный)
+
         const href = link.getAttribute('href');
         if (!href) return;
 
-        // 3. Очищаем href от начального слэша для сравнения (чтобы "/ceny.html" стал "ceny.html")
-        const cleanHref = href.startsWith('/') ? href.substring(1) : href;
+        // 1. Прямое совпадение (например, для Цены, Галерея и т.д.)
+        const isExactMatch = currentPath.endsWith(href) || (currentPath === '/' && href === '/index.html');
 
-        // ПРОВЕРКА:
-        // Если имя файла совпадает ИЛИ если мы на главной и ссылка ведет на index.html
-        if (cleanHref === currentPage || (currentPath === '/' && cleanHref === 'index.html')) {
-            link.classList.add('active');
+        // 2. Умная проверка КАТАЛОГА (учитываем разницу k/c)
+        // Если мы в папке /catalog/ или на странице /katalog.html
+        const isCatalogPage = currentPath.includes('catalog') || currentPath.includes('katalog');
+        const isCatalogLink = href.includes('katalog') || href.includes('catalog');
+        
+        const isCatalogActive = isCatalogPage && isCatalogLink;
+
+        if (isExactMatch || isCatalogActive) {
+            link.classList.add('active', 'text-gold-accent');
+            link.classList.remove('text-white/70');
             
-            // Дополнительная подсветка для мобильного меню
+            // Если это мобильное меню, там текст обычно чисто белый, если не активен
             if (link.closest('#mobile-menu-dropdown')) {
                 link.classList.add('text-gold-accent');
             }
@@ -239,12 +243,12 @@ function updateBreadcrumbs() {
         // Проверяем вхождение папки /catalog/ в пути
         if (fullPath.includes('/catalog/') && currentPage !== 'katalog.html') {
             const catalogLink = document.createElement('span');
-            catalogLink.className = 'dynamic-link flex items-center'; 
+            catalogLink.className = 'dynamic-link flex items-center space-x-2'; 
             
             // Ссылка на каталог теперь всегда абсолютная (от корня)
             catalogLink.innerHTML = `
                 <a href="/katalog.html" class="text-gray-400 hover:text-primary-green transition-colors">Каталог</a>
-                <i class="fas fa-chevron-right text-[11px] text-gray-300 transform translate-y-[1.5px] mx-2"></i>
+                <i class="fas fa-chevron-right text-[11px] text-gray-300 transform translate-y-[1.5px]"></i>
             `;
             
             breadcrumbLabel.before(catalogLink);
