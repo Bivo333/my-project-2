@@ -336,101 +336,134 @@ function initPhoneMask() {
 /**
  * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
  */
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Грузим базу (Хедер и Футер обязательно здесь!)
-    const baseTasks = [
-        loadComponent('header-top-res', '/components/header.html'),
-        loadComponent('nav-res', '/components/nav.html'),
-        loadComponent('breadcrumbs-res', '/components/breadcrumbs.html'),
-        loadComponent('footer-res', '/components/footer.html'),
-        loadComponent('callback-modal-res', '/components/zakaz-zvonka.html')
-    ];
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Загружаем обычные компоненты (ДОБАВЛЕН "/" В НАЧАЛЕ ПУТЕЙ)
+    loadComponent('header-top-res', '/components/header.html');
+    loadComponent('nav-res', '/components/nav.html');
+    loadComponent('breadcrumbs-res', '/components/breadcrumbs.html');
+    loadComponent('footer-res', '/components/footer.html');
+    loadComponent('callback-modal-res', '/components/zakaz-zvonka.html');
 
-    try {
-        // Ждем все базовые компоненты
-        await Promise.all(baseTasks);
+    // 2. Большой каталог
+    if (document.getElementById('catalog-res')) {
+        // ИСПРАВЛЕНО: Теперь фильтр инициализируется ТОЛЬКО после загрузки HTML каталога
+        loadComponent('catalog-res', '/components/blok-kataloga.html').then(() => {
+            if (typeof initGalleryFilter === 'function') {
+                initGalleryFilter();
+            }
+        });
+    }
 
-        // 2. ЗАПУСК BARBA (теперь она видит логотипы и в хедере, и в футере)
-        initBarba();
+    // 3. Компактный каталог
+    if (document.getElementById('catalog-sm-res')) {
+        loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html');
+    }
 
-        // 3. Специфичные блоки текущей страницы
-        const pageTasks = [];
-        if (document.getElementById('catalog-res')) pageTasks.push(loadComponent('catalog-res', '/components/blok-kataloga.html'));
-        if (document.getElementById('catalog-sm-res')) pageTasks.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
-        if (document.getElementById('hero-slider-res')) pageTasks.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
-        
-        if (pageTasks.length > 0) await Promise.all(pageTasks);
-
-        // 4. Оживляем скрипты
-        initAllScripts();
-
-        // Маска телефона
-        if (!document.querySelector('script[src*="inputmask"]')) {
-            const maskScript = document.createElement('script');
-            maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
-            maskScript.onload = initPhoneMask;
-            document.head.appendChild(maskScript);
+    // 4. ЗАГРУЖАЕМ СЛАЙДЕР (ДОБАВЛЕН "/")
+    loadComponent('hero-slider-res', '/components/hero-slider.html').then(() => {
+        if (typeof Swiper !== 'undefined' && document.querySelector('.myHeroSwiper')) {
+            new Swiper(".myHeroSwiper", {
+                loop: true,
+                speed: 1200,
+                touchRatio: 2,
+                touchAngle: 45,
+                shortSwipes: true,
+                longSwipes: false,
+                grabCursor: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+            });
         }
-    } catch (err) {
-        console.error("Ошибка загрузки:", err);
+    });
+
+    // Маска телефона
+    if (!document.querySelector('script[src*="inputmask"]')) {
+        const maskScript = document.createElement('script');
+        maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
+        maskScript.onload = initPhoneMask;
+        document.head.appendChild(maskScript);
     }
 });
 
 /**
- * 9. ГЛОБАЛЬНЫЙ ОБРАБОТЧИК КЛИКОВ
+ * 9. ГЛОБАЛЬНЫЙ ОБРАБОТЧИК КЛИКОВ (ФИНАЛЬНАЯ ВЕРСИЯ)
  */
 document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.trigger-callback');
+    
     if (trigger) {
         const isMobile = window.innerWidth <= 768;
         const isPhoneLink = trigger.tagName === 'A' && trigger.getAttribute('href')?.startsWith('tel:');
 
+        // Если это не прямой звонок по ссылке на мобильном — открываем модалку
         if (!isMobile || (isMobile && !isPhoneLink)) {
             e.preventDefault();
             let productName = '';
 
-            // 1. Если это клик по телефону или кнопке "Заказать звонок" без контекста товара
-            // Проверяем, есть ли у триггера атрибут href со ссылкой на телефон или это просто кнопка звонка
-            const isPlainCall = isPhoneLink || trigger.innerText.toLowerCase().includes('звонок') || trigger.innerText.toLowerCase().includes('связаться');
-
-            if (isPlainCall) {
-                productName = 'Заказать звонок';
-            } else {
-                // 2. Иначе ищем название товара (твоя старая логика)
-                const row = trigger.closest('tr');
-                if (row) {
-                    let prevRow = row.previousElementSibling;
-                    while (prevRow) {
-                        const headerCell = prevRow.querySelector('td[colspan]');
-                        if (headerCell) {
-                            productName = headerCell.innerText.trim();
-                            break;
-                        }
-                        prevRow = prevRow.previousElementSibling;
+            // 1. Поиск в таблицах (для прайс-листов)
+            const row = trigger.closest('tr');
+            if (row) {
+                let prevRow = row.previousElementSibling;
+                while (prevRow) {
+                    const headerCell = prevRow.querySelector('td[colspan]');
+                    if (headerCell) {
+                        productName = headerCell.innerText.trim();
+                        break;
                     }
+                    prevRow = prevRow.previousElementSibling;
                 }
-
-                // 3. Поиск в карточке (h3)
                 if (!productName) {
-                    const card = trigger.closest('.p-5') || trigger.closest('section');
-                    const h3Title = card?.querySelector('h3');
-                    if (h3Title) productName = h3Title.innerText.trim();
+                    const firstCell = row.querySelector('td:first-child');
+                    if (firstCell && firstCell.innerText.trim().length > 1) {
+                        productName = firstCell.innerText.trim();
+                    }
                 }
             }
 
-            // Если всё еще пусто — берем H1 или стандарт
+            // 2. Поиск в карточках товара (по заголовку h3)
             if (!productName) {
-                productName = 'Заказать звонок';
+                const card = trigger.closest('.product-card') || trigger.closest('.item-container') || trigger.closest('.p-5');
+                const h3Title = card?.querySelector('h3');
+                if (h3Title) productName = h3Title.innerText.trim();
+            }
+
+            // 3. Если всё еще пусто — берем текст кнопки (фильтруем мусор)
+            if (!productName) {
+                const btnText = trigger.innerText.trim();
+                
+                // Фильтр 1: Если в тексте кнопки больше 5 цифр — это номер телефона (игнорируем)
+                const isPhoneNumber = btnText.replace(/\D/g, '').length > 5;
+                
+                // Фильтр 2: Если это стандартные фразы "Заказать звонок"
+                const boringTexts = ['заказать звонок', 'перезвоните мне', 'обратный звонок', 'связаться с нами'];
+                const isBoring = boringTexts.some(t => btnText.toLowerCase() === t.toLowerCase());
+
+                if (!isPhoneNumber && !isBoring) {
+                    productName = btnText; 
+                }
             }
 
             openCallbackModal(productName);
         }
     }
 
-    // Кнопка корзины и закрытие модалки (оставляем как было)
+    // --- Другие обработчики кликов ---
+    
+    // Анимация корзины
     const buyBtn = e.target.closest('.buy-btn') || (e.target.closest('button') && e.target.innerText.toLowerCase().includes('корзину'));
     if (buyBtn) animateCart();
 
+    // Закрытие модалки
     const modal = document.getElementById('callback-modal');
     if (modal && (e.target.closest('#close-modal') || e.target === modal)) {
         closeCallbackModal();
@@ -536,81 +569,3 @@ document.addEventListener('DOMContentLoaded', () => {
     initGalleryFilter();
     initFancybox();
 });
-
-/**
- * 13. ИНИЦИАЛИЗАЦИЯ ВСЕХ КОМПОНЕНТОВ (для Barba.js и первого входа)
- */
-function initAllScripts() {
-    // 1. Базовые функции интерфейса
-    updateBreadcrumbs();
-    setActiveLink();
-    initMobileMenu();
-    initPhoneMask(); // Твоя маска телефона
-    initGalleryFilter();
-    initFancybox();
-    
-    // 2. Твой Swiper со всеми настройками (из старого 8-го блока)
-    if (typeof Swiper !== 'undefined' && document.querySelector('.myHeroSwiper')) {
-        new Swiper(".myHeroSwiper", {
-            loop: true,
-            speed: 1200,
-            touchRatio: 2,
-            touchAngle: 45,
-            shortSwipes: true,
-            longSwipes: false,
-            grabCursor: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-        });
-    }
-}
-
-/**
- * 14. ЛОГИКА BARBA.JS (0.2s)
- */
-function initBarba() {
-    if (typeof barba === 'undefined') return;
-
-    barba.init({
-        transitions: [{
-            name: 'fade-transition',
-            async leave(data) {
-                return gsap.to(data.current.container, {
-                    opacity: 0,
-                    duration: 0.2
-                });
-            },
-            async enter(data) {
-                window.scrollTo(0, 0);
-                
-                // Подгружаем блоки для новой страницы
-                const container = data.next.container;
-                const dynamicTasks = [];
-                if (container.querySelector('#catalog-res')) dynamicTasks.push(loadComponent('catalog-res', '/components/blok-kataloga.html'));
-                if (container.querySelector('#catalog-sm-res')) dynamicTasks.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
-                if (container.querySelector('#hero-slider-res')) dynamicTasks.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
-                
-                if (dynamicTasks.length > 0) await Promise.all(dynamicTasks);
-
-                // Появление
-                gsap.from(data.next.container, {
-                    opacity: 0,
-                    duration: 0.2,
-                    clearProps: "all"
-                });
-
-                initAllScripts();
-            }
-        }]
-    });
-}

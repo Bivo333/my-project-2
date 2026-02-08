@@ -9,7 +9,6 @@
     
     <script src="https://unpkg.com/@barba/core"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/style.css">
@@ -35,53 +34,57 @@
 
     <main class="py-2 md:pt-2 md:py-4" data-barba="container">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl md:text-4xl font-black text-dark-green mb-12 uppercase tracking-tight text-center md:text-left">
+            
+            <h1 class="text-3xl md:text-3xl font-black text-dark-green mb-4 md:md-4 uppercase tracking-tight text-center md:text-left">
                 Контакты
             </h1>
 
-            <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
                 
-                <div class="lg:w-1/2 flex flex-col gap-8">
+                <div class="lg:w-1/2 flex flex-col gap-6 md:gap-8">
                     
-                    <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-gold-accent flex-1 flex flex-col justify-center transition-transform hover:scale-[1.01]">
-                        <h3 class="text-xl font-bold text-primary-green mb-4 uppercase text-center md:text-left">Магазин (Ярославское ш.)</h3>
-                        <p class="text-gray-700 leading-relaxed mb-6 text-center md:text-left">
-                            ТСК "Тракт-Терминал" Ярославское ш. 
-                            г.Мытищи, ул.Коммунистическая,25Гк13
-                            павильон СП-102<br>
-                            (1й на въезде в ряд"Пиломатериалы")
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-lg border-l-8 border-gold-accent flex-1 flex flex-col justify-center transition-transform hover:scale-[1.01]">
+                        <h3 class="text-xl font-bold text-primary-green mb-3 uppercase">Магазин (Ярославское ш.)</h3>
+                        <p class="text-gray-700 leading-relaxed mb-6 text-sm md:text-base">
+                            ТСК "Тракт-Терминал" Ярославское ш. <br>
+                            г.Мытищи, ул.Коммунистическая, 25Гк13<br>
+                            павильон СП-102 <span class="text-xs text-gray-400 block md:inline">(1й на въезде в ряд "Пиломатериалы")</span>
                         </p>
-                        <a href="tel:+79775007879" class="trigger-callback text-center md:text-left text-2xl md:text-3xl font-black text-dark-green hover:text-gold-accent transition-colors block">
+                        <a href="tel:+79775007879" class="trigger-callback text-xl md:text-3xl font-black text-dark-green hover:text-gold-accent transition-colors">
                             +7 (977) 500-78-79
                         </a>
                     </div>
 
-                    <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-primary-green flex-1 flex flex-col justify-center transition-transform hover:scale-[1.01]">
-                        <h3 class="text-xl font-bold text-primary-green mb-4 uppercase text-center md:text-left">Склад (МКАД 41 км)</h3>
-                        <p class="text-gray-700 leading-relaxed mb-6 text-center md:text-left">
+                    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-lg border-l-8 border-primary-green flex-1 flex flex-col justify-center transition-transform hover:scale-[1.01]">
+                        <h3 class="text-xl font-bold text-primary-green mb-3 uppercase">Склад (МКАД 41 км)</h3>
+                        <p class="text-gray-700 leading-relaxed mb-6 text-sm md:text-base">
                             Рынок "Славянский Мир"<br>
-                            41-й км МКАД
+                            41-й км МКАД, внешняя сторона
                         </p>
-                        <a href="tel:+79775007879" class="trigger-callback text-center md:text-left text-2xl md:text-3xl font-black text-dark-green hover:text-gold-accent transition-colors block">
+                        <a href="tel:+79775007879" class="trigger-callback text-xl md:text-3xl font-black text-dark-green hover:text-gold-accent transition-colors">
                             +7 (977) 500-78-79
                         </a>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://wa.me/79775007879" target="_blank" class="bg-[#25D366] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold shadow-md">
-                            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                        <a href="https://wa.me/79775007879" target="_blank" class="bg-[#25D366] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold shadow-md flex items-center justify-center gap-2">
+                            <i class="fab fa-whatsapp text-xl"></i> WhatsApp
                         </a>
-                        <a href="https://t.me/+79775007879" target="_blank" class="bg-[#0088cc] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold shadow-md">
-                            <i class="fab fa-telegram-plane mr-2"></i> Telegram
+                        <a href="https://t.me/+79775007879" target="_blank" class="bg-[#0088cc] text-white p-4 rounded-2xl hover:opacity-90 transition-opacity flex-1 text-center font-bold shadow-md flex items-center justify-center gap-2">
+                            <i class="fab fa-telegram-plane text-xl"></i> Telegram
                         </a>
                     </div>
                 </div>
 
                 <div class="lg:w-1/2">
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg h-[450px] md:h-full min-h-[450px] md:min-h-[500px] border border-gray-100">
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg h-[400px] md:h-full min-h-[400px] border border-gray-100 relative">
                         <iframe
-                            src="https://yandex.ru/map-widget/v1/?um=constructor%3Afdbce688fd551af62416d447e82d68f0db2d4d2b11cae54d3ce8b9f93b64ee73&amp;source=constructor"
-                            width="500" height="500" frameborder="0"></iframe>
+                            src="https://yandex.ru/map-widget/v1/?um=constructor%3Afdbce688fd551af62416d447e82d68f0db2d4d2b11cae54d3ce8b9f93b64ee73&amp;source=constructor"                            
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0"
+                            class="absolute inset-0">
+                        </iframe>
                     </div>
                 </div>
 
