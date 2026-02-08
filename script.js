@@ -257,55 +257,53 @@ function updateBreadcrumbs() {
 }
 
 /**
- * 6. ЛОГИКА МОДАЛЬНОГО ОКНА
+ * 6. ЛОГИКА МОДАЛЬНОГО ОКНА (Надежная версия)
  */
 function openCallbackModal(productName = null, isEmailMode = false) {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
-    const titleElement = modal?.querySelector('h3');
-    const subjectInput = document.getElementById('form-subject');
-
-    if (!modal || !content) return;
-
-    // Сбрасываем форму перед открытием
-    document.getElementById('callbackForm')?.reset();
-
-    // ПУНКТ 1: Если передан товар, ставим заголовок "Заказать: Товар"
-    if (productName && productName.trim().length > 0) {
-        let cleanName = productName.trim();
-        // Делаем первую букву заглавной, остальные строчными
-        cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
-        
-        if (titleElement) {
-            // ИСПРАВЛЕНО: замещаем скобку на перенос строки + скобку
-            // Используем innerHTML вместо innerText
-            const formattedTitle = cleanName.replace('(', '<br>(');
-            titleElement.innerHTML = 'Заказать: ' + formattedTitle;
-        }
-        
-        if (subjectInput) {
-            // В тему письма пишем чистый текст без тега <br>
-            subjectInput.value = 'Заказ товара: ' + cleanName;
-        }
-    } 
-    // ПУНКТ 2 и 3: Если товара нет, ставим базовый заголовок в зависимости от кнопки
-    else {
-        if (titleElement) {
-            titleElement.innerHTML = isEmailMode ? 'Написать нам' : 'Заказать звонок';
-        }
+    
+    if (!modal || !content) {
+        console.error("Ошибка: Модальное окно не найдено в DOM");
+        return;
     }
 
-    // Включаем нужный режим (телефон или почта)
-    window.switchFormMode(isEmailMode ? 'chat' : 'call');
+    const titleElement = modal.querySelector('h3');
+    const subjectInput = document.getElementById('form-subject');
 
-    // Показываем модалку
+    // Сбрасываем форму
+    document.getElementById('callbackForm')?.reset();
+
+    let displayTitle = '';
+    let emailSubject = '';
+
+    // Логика заголовка
+    if (productName && productName.trim().length > 0 && productName.toLowerCase() !== 'заказать звонок') {
+        let cleanName = productName.trim();
+        cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
+        displayTitle = 'Заказать: ' + cleanName.replace('(', '<br>(');
+        emailSubject = 'Заказ товара: ' + cleanName;
+    } else {
+        displayTitle = isEmailMode ? 'Написать нам' : 'Заказать звонок';
+        emailSubject = isEmailMode ? 'Сообщение с сайта' : 'Заказ обратного звонка';
+    }
+
+    if (titleElement) titleElement.innerHTML = displayTitle;
+    if (subjectInput) subjectInput.value = emailSubject;
+
+    // Режим формы
+    if (typeof window.switchFormMode === 'function') {
+        window.switchFormMode(isEmailMode ? 'chat' : 'call');
+    }
+
+    // Показ
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
 
     setTimeout(() => {
-        content.classList.replace('scale-95', 'scale-100');
-        content.classList.replace('opacity-0', 'opacity-100');
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
         document.getElementById('user-name')?.focus();
     }, 10);
 }
@@ -315,8 +313,8 @@ function closeCallbackModal() {
     const content = document.getElementById('modal-content');
     if (!modal || !content) return;
 
-    content.classList.replace('scale-100', 'scale-95');
-    content.classList.replace('opacity-100', 'opacity-0');
+    content.classList.remove('scale-100', 'opacity-100');
+    content.classList.add('scale-95', 'opacity-0');
     
     setTimeout(() => {
         modal.classList.add('hidden');
@@ -339,8 +337,8 @@ function initPhoneMask() {
  * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
  */
 document.addEventListener('DOMContentLoaded', async () => {
-    // Собираем все компоненты, которые нужно загрузить
-    const tasks = [
+    // 1. Грузим базу (Хедер и Футер обязательно здесь!)
+    const baseTasks = [
         loadComponent('header-top-res', '/components/header.html'),
         loadComponent('nav-res', '/components/nav.html'),
         loadComponent('breadcrumbs-res', '/components/breadcrumbs.html'),
@@ -348,29 +346,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadComponent('callback-modal-res', '/components/zakaz-zvonka.html')
     ];
 
-    // Добавляем специфичные блоки, если они есть на странице
-    if (document.getElementById('catalog-res')) {
-        tasks.push(loadComponent('catalog-res', '/components/blok-kataloga.html'));
-    }
-    if (document.getElementById('catalog-sm-res')) {
-        tasks.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
-    }
-    if (document.getElementById('hero-slider-res')) {
-        tasks.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
-    }
+    try {
+        // Ждем все базовые компоненты
+        await Promise.all(baseTasks);
 
-    // Ждем выполнения всех загрузок
-    await Promise.all(tasks);
+        // 2. ЗАПУСК BARBA (теперь она видит логотипы и в хедере, и в футере)
+        initBarba();
 
-    // Когда всё подгрузилось — запускаем скрипты (включая слайдер)
-    initAllScripts();
+        // 3. Специфичные блоки текущей страницы
+        const pageTasks = [];
+        if (document.getElementById('catalog-res')) pageTasks.push(loadComponent('catalog-res', '/components/blok-kataloga.html'));
+        if (document.getElementById('catalog-sm-res')) pageTasks.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
+        if (document.getElementById('hero-slider-res')) pageTasks.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
+        
+        if (pageTasks.length > 0) await Promise.all(pageTasks);
 
-    // Загрузка маски (если её еще нет в системе)
-    if (!document.querySelector('script[src*="inputmask"]')) {
-        const maskScript = document.createElement('script');
-        maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
-        maskScript.onload = initPhoneMask;
-        document.head.appendChild(maskScript);
+        // 4. Оживляем скрипты
+        initAllScripts();
+
+        // Маска телефона
+        if (!document.querySelector('script[src*="inputmask"]')) {
+            const maskScript = document.createElement('script');
+            maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
+            maskScript.onload = initPhoneMask;
+            document.head.appendChild(maskScript);
+        }
+    } catch (err) {
+        console.error("Ошибка загрузки:", err);
     }
 });
 
@@ -387,50 +389,48 @@ document.addEventListener('click', (e) => {
             e.preventDefault();
             let productName = '';
 
-            // 1. Поиск в таблице (твоя логика)
-            const row = trigger.closest('tr');
-            if (row) {
-                let prevRow = row.previousElementSibling;
-                while (prevRow) {
-                    const headerCell = prevRow.querySelector('td[colspan]');
-                    if (headerCell) {
-                        productName = headerCell.innerText.trim();
-                        break;
+            // 1. Если это клик по телефону или кнопке "Заказать звонок" без контекста товара
+            // Проверяем, есть ли у триггера атрибут href со ссылкой на телефон или это просто кнопка звонка
+            const isPlainCall = isPhoneLink || trigger.innerText.toLowerCase().includes('звонок') || trigger.innerText.toLowerCase().includes('связаться');
+
+            if (isPlainCall) {
+                productName = 'Заказать звонок';
+            } else {
+                // 2. Иначе ищем название товара (твоя старая логика)
+                const row = trigger.closest('tr');
+                if (row) {
+                    let prevRow = row.previousElementSibling;
+                    while (prevRow) {
+                        const headerCell = prevRow.querySelector('td[colspan]');
+                        if (headerCell) {
+                            productName = headerCell.innerText.trim();
+                            break;
+                        }
+                        prevRow = prevRow.previousElementSibling;
                     }
-                    prevRow = prevRow.previousElementSibling;
                 }
+
+                // 3. Поиск в карточке (h3)
                 if (!productName) {
-                    const firstCell = row.querySelector('td:first-child');
-                    if (firstCell && firstCell.innerText.trim().length > 1) {
-                        productName = firstCell.innerText.trim();
-                    }
+                    const card = trigger.closest('.p-5') || trigger.closest('section');
+                    const h3Title = card?.querySelector('h3');
+                    if (h3Title) productName = h3Title.innerText.trim();
                 }
             }
 
-            // 2. Поиск в карточке (h3)
+            // Если всё еще пусто — берем H1 или стандарт
             if (!productName) {
-                const card = trigger.closest('.p-5') || trigger.closest('section');
-                const h3Title = card?.querySelector('h3');
-                if (h3Title) productName = h3Title.innerText.trim();
-            }
-
-            // 3. ИСПРАВЛЕНИЕ: Поиск в заголовке страницы (H1), если остальное не сработало
-            if (!productName) {
-                const pageTitle = document.querySelector('h1');
-                if (pageTitle) productName = pageTitle.innerText.trim();
+                productName = 'Заказать звонок';
             }
 
             openCallbackModal(productName);
         }
     }
 
-    // Обработка кнопки "В корзину"
+    // Кнопка корзины и закрытие модалки (оставляем как было)
     const buyBtn = e.target.closest('.buy-btn') || (e.target.closest('button') && e.target.innerText.toLowerCase().includes('корзину'));
-    if (buyBtn) {
-        animateCart();
-    }
+    if (buyBtn) animateCart();
 
-    // Закрытие модального окна
     const modal = document.getElementById('callback-modal');
     if (modal && (e.target.closest('#close-modal') || e.target === modal)) {
         closeCallbackModal();
@@ -576,32 +576,39 @@ function initAllScripts() {
 }
 
 /**
- * 14. ЛОГИКА BARBA.JS
+ * 14. ЛОГИКА BARBA.JS (0.2s)
  */
-if (typeof barba !== 'undefined') {
+function initBarba() {
+    if (typeof barba === 'undefined') return;
+
     barba.init({
         transitions: [{
             name: 'fade-transition',
-            // Уходим со старой страницы
             async leave(data) {
                 return gsap.to(data.current.container, {
                     opacity: 0,
-                    duration: 0.3
+                    duration: 0.2
                 });
             },
-            // Приходим на новую страницу
             async enter(data) {
-                // Скроллим в самый верх
                 window.scrollTo(0, 0);
                 
-                // Анимация появления
+                // Подгружаем блоки для новой страницы
+                const container = data.next.container;
+                const dynamicTasks = [];
+                if (container.querySelector('#catalog-res')) dynamicTasks.push(loadComponent('catalog-res', '/components/blok-kataloga.html'));
+                if (container.querySelector('#catalog-sm-res')) dynamicTasks.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
+                if (container.querySelector('#hero-slider-res')) dynamicTasks.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
+                
+                if (dynamicTasks.length > 0) await Promise.all(dynamicTasks);
+
+                // Появление
                 gsap.from(data.next.container, {
                     opacity: 0,
-                    duration: 0.3
+                    duration: 0.2,
+                    clearProps: "all"
                 });
 
-                // САМОЕ ВАЖНОЕ: запускаем скрипты для нового контента
-                // Это оживит слайдер и маску на новой странице
                 initAllScripts();
             }
         }]
