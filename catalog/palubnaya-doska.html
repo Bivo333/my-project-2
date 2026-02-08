@@ -6,34 +6,18 @@
     <title>Палубная доска из лиственницы купить в Москве — МосЛиства</title>
     <meta name="description" content="Продажа палубной доски из лиственницы от производителя. Все сорта (Экстра, Прима, АВ). Доставка по Москве и области.">
     <link rel="icon" type="image/webp" href="/images/ui/logo.webp">
-
-    <script src="https://unpkg.com/@barba/core"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/style.css"> <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-green': '#2D5D42',
-                        'dark-green': '#1B3022',
-                        'gold-accent': '#FFB800',
-                        'light-gray': '#F8F9FA',
-                    }
-                }
-            }
+    <script>
+        if (window.location.pathname !== '/index.html' && !window.isRouterActive) {
+            window.location.href = '/index.html?load=' + encodeURIComponent(window.location.pathname);
         }
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 
-<body class="bg-light-gray flex flex-col min-h-screen" data-barba="wrapper">
-    <div id="header-top-res"></div>
-    <div id="nav-res" class="sticky top-0 z-50 shadow-sm"></div>
-    <div id="breadcrumbs-res"></div>
-
-    <main class="flex-grow" data-barba="container">
+<body class="bg-light-gray flex flex-col min-h-screen">    
+    <main class="flex-grow">
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 md:pt-4 md:py-3">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 
@@ -45,7 +29,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <h1 class="text-3xl md:text-4xl font-black text-dark-green uppercase tracking-tight">
+                    <h1 class="text-2xl md:text-3xl font-black text-dark-green uppercase tracking-tight">
                         Палубная доска
                     </h1>
                     <p class="text-gray-500 mt-1 text-lg font-medium italic">из лиственницы</p>
@@ -218,10 +202,5 @@
             </div>
         </section>
     </main>
-
-    <div id="footer-res"></div>
-    <div id="callback-modal-res"></div>
-
-    <script src="/script.js"></script>
 </body>
 </html>

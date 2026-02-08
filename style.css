@@ -253,3 +253,6 @@ body.overflow-hidden {
     pointer-events: none; /* Запрещает наведение и повторные клики */
     cursor: default;
 }
+
+/* В файле style.css */
+[data-fancybox] { cursor: zoom-in; }

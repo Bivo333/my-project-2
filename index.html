@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Изделия из лиственницы от производителя: палубная доска, планкен, вагонка — МосЛиства</title>
     <meta name="description" content="У нас Вы можете купить изделия из лиственницы: палубную доску, планкен и вагонку с доставкой по Москве и МО.">
-    <link rel="icon" type="/image/png" href="/images/ui/logo.webp">
-
-    <script src="https://unpkg.com/@barba/core"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="icon" type="image/webp" href="/images/ui/logo.webp">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -24,21 +24,35 @@
                         'primary-green': '#2D5D42',
                         'dark-green': '#1B3022',
                         'gold-accent': '#FFB800',
-                        'gold-hover': '#E6A700', // Чуть темнее для эффекта нажатия
+                        'gold-hover': '#E6A700',
                         'light-gray': '#F8F9FA',
                     }
                 }
             }
         }
     </script>
+
+    <style>
+        /* Базовое состояние страницы */
+        main {
+            transition: opacity 0.25s ease-in-out;
+            opacity: 1;
+        }
+        /* Состояние во время загрузки контента роутером */
+        main.loading {
+            opacity: 0;
+        }
+        /* Курсор для картинок галереи */
+        [data-fancybox] { cursor: zoom-in; }
+    </style>
 </head>
 
-<body class="bg-light-gray flex flex-col min-h-screen" data-barba="wrapper">
+<body class="bg-light-gray flex flex-col min-h-screen">
     <div id="header-top-res"></div>
     <div id="nav-res" class="sticky top-0 z-50"></div>
     <div id="breadcrumbs-res"></div>
 
-    <main data-barba="container">
+    <main id="main-content">
         <div id="hero-slider-res"></div>    
         <div id="catalog-sm-res"></div>
     </main>
@@ -46,7 +60,8 @@
     <div id="footer-res"></div>
     <div id="callback-modal-res"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     <script src="/script.js"></script>
+    <script src="/js/router.js"></script>
 </body>
-
 </html>

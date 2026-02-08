@@ -1,4 +1,24 @@
 /**
+ * ГЛОБАЛЬНЫЕ ФЛАГИ
+ */
+window.isRouterActive = true; 
+
+/**
+ * ГЛОБАЛЬНАЯ ИНИЦИАЛИЗАЦИЯ (Для SPA)
+ */
+function initAllScripts() {
+    console.log("Перезапуск всех скриптов страницы...");
+    
+    setActiveLink();
+    updateBreadcrumbs();
+    initMobileMenu();
+    initHeroSlider(); 
+    initGalleryFilter(); 
+    initFancybox(); 
+    initPhoneMask(); 
+}
+
+/**
  * 1. АНИМАЦИЯ КОРЗИНЫ
  */
 function animateCart() {
@@ -6,7 +26,7 @@ function animateCart() {
     if (!cartBtn) return;
     
     cartBtn.classList.remove('cart-animate');
-    void cartBtn.offsetWidth; // Force reflow
+    void cartBtn.offsetWidth; 
     cartBtn.classList.add('cart-animate');
     
     setTimeout(() => {
@@ -15,7 +35,7 @@ function animateCart() {
 }
 
 /**
- * ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ ФОРМЫ (Глобальная функция)
+ * ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ ФОРМЫ
  */
 window.switchFormMode = function(mode) {
     const btnChat = document.getElementById('btn-chat');
@@ -27,8 +47,6 @@ window.switchFormMode = function(mode) {
     const emailInput = document.getElementById('user-email');
     const titleElement = document.querySelector('#callback-modal h3');
 
-    // Проверяем, не заказывает ли пользователь конкретный товар
-    // Если в заголовке есть "Заказать:", мы его не трогаем (Пункт 1)
     const isProductOrder = titleElement?.innerText.includes('Заказать:');
 
     if (mode === 'chat') {
@@ -37,15 +55,10 @@ window.switchFormMode = function(mode) {
         if (subject) subject.value = "Заявка на чат (Email)";
         if (phoneInput) phoneInput.required = false;
         if (emailInput) emailInput.required = true;
+        if (!isProductOrder && titleElement) titleElement.innerText = 'Написать нам';
 
-        // Меняем заголовок на "Написать нам", если это не заказ товара (Пункт 2)
-        if (!isProductOrder && titleElement) {
-            titleElement.innerText = 'Написать нам';
-        }
-
-        // Дизайн активной кнопки Чат
-        btnChat.className = "flex-1 py-2.5 px-2 bg-white shadow-sm rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
-        btnCall.className = "flex-1 py-2.5 px-2 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
+        btnChat.className = "flex-1 py-2.5 px-2 bg-white shadow-sm rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-2 outline-none cursor-pointer group";
+        btnCall.className = "flex-1 py-2.5 px-2 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-all flex items-center justify-center gap-2 outline-none cursor-pointer group";
         
         updateBtnContent(btnChat, true);
         updateBtnContent(btnCall, false);
@@ -55,26 +68,21 @@ window.switchFormMode = function(mode) {
         if (subject) subject.value = "Обратный звонок";
         if (phoneInput) phoneInput.required = true;
         if (emailInput) emailInput.required = false;
+        if (!isProductOrder && titleElement) titleElement.innerText = 'Заказать звонок';
 
-        // Меняем заголовок на "Заказать звонок", если это не заказ товара (Пункт 3)
-        if (!isProductOrder && titleElement) {
-            titleElement.innerText = 'Заказать звонок';
-        }
-
-        // Дизайн активной кнопки Звонок
-        btnCall.className = "flex-1 py-2.5 px-2 bg-white shadow-sm rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
-        btnChat.className = "flex-1 py-2.5 px-2 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-all flex items-center justify-center gap-2 border-0 outline-none cursor-pointer group";
+        btnCall.className = "flex-1 py-2.5 px-2 bg-white shadow-sm rounded-xl border border-gray-200 transition-all flex items-center justify-center gap-2 outline-none cursor-pointer group";
+        btnChat.className = "flex-1 py-2.5 px-2 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-all flex items-center justify-center gap-2 outline-none cursor-pointer group";
         
         updateBtnContent(btnCall, true);
         updateBtnContent(btnChat, false);
     }
 }
 
-// Вспомогательная функция для иконок (чтобы код был чище)
 function updateBtnContent(btn, active) {
     if (!btn) return;
     const icon = btn.querySelector('i');
     const span = btn.querySelector('span');
+    if (!icon || !span) return;
     if (active) {
         icon.className = icon.className.replace('text-gray-400', 'text-primary-green');
         span.className = span.className.replace('text-gray-500', 'text-primary-green');
@@ -90,7 +98,6 @@ function updateBtnContent(btn, active) {
 function initMobileMenu() {
     const btn = document.getElementById('mobile-menu-btn');
     const dropdown = document.getElementById('mobile-menu-dropdown');
-
     if (!btn || !dropdown) return;
 
     const newBtn = btn.cloneNode(true);
@@ -99,7 +106,6 @@ function initMobileMenu() {
     newBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isHidden = dropdown.classList.contains('hidden');
-        
         if (isHidden) {
             dropdown.classList.remove('hidden');
             newBtn.innerHTML = '<i class="fas fa-times text-2xl"></i>';
@@ -123,69 +129,42 @@ function initMobileMenu() {
 async function loadComponent(id, url) {
     const element = document.getElementById(id);
     if (!element) return;
+    
+    // Если в блоке уже есть дети, значит он загружен — не грузим второй раз
+    if (element.children.length > 0) return true;
 
     try {
-        // Добавляем return, чтобы функция возвращала промис
-        return fetch(url) 
-            .then(response => {
-                if (!response.ok) throw new Error(`Ошибка загрузки: ${url}`);
-                return response.text();
-            })
-            .then(html => {
-                element.innerHTML = html;
-                
-                // Внутренняя логика после вставки HTML
-                if (id === 'nav-res') {
-                    setActiveLink();
-                    initMobileMenu();
-                }
-                if (id === 'callback-modal-res') {
-                    initPhoneMask();
-                }
-                if (id === 'breadcrumbs-res') {
-                    updateBreadcrumbs();
-                }
-            });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Ошибка загрузки: ${url}`);
+        const html = await response.text();
+        element.innerHTML = html;
+        return true; 
     } catch (error) {
         console.error(`Ошибка компонента #${id}:`, error);
+        return false;
     }
 }
 
 /**
- * 4. ПОДСВЕТКА АКТИВНОЙ ССЫЛКИ (ФИНАЛЬНЫЙ ФИКС)
+ * 4. ПОДСВЕТКА АКТИВНОЙ ССЫЛКИ
  */
 function setActiveLink() {
     const currentPath = window.location.pathname;
-    
-    // Собираем все ссылки: и из десктопного меню (.nav-link), и из мобильного
     const navLinks = document.querySelectorAll('.nav-link, #mobile-menu-dropdown a');
 
     navLinks.forEach(link => {
-        // Очищаем старые стили
-        link.classList.remove('active', 'text-gold-accent', 'text-white');
-        link.classList.add('text-white/70'); // Базовый цвет (полупрозрачный)
+        link.classList.remove('active', 'text-gold-accent');
+        link.classList.add('text-white/70');
 
         const href = link.getAttribute('href');
         if (!href) return;
 
-        // 1. Прямое совпадение (например, для Цены, Галерея и т.д.)
-        const isExactMatch = currentPath.endsWith(href) || (currentPath === '/' && href === '/index.html');
-
-        // 2. Умная проверка КАТАЛОГА (учитываем разницу k/c)
-        // Если мы в папке /catalog/ или на странице /katalog.html
-        const isCatalogPage = currentPath.includes('catalog') || currentPath.includes('katalog');
-        const isCatalogLink = href.includes('katalog') || href.includes('catalog');
-        
-        const isCatalogActive = isCatalogPage && isCatalogLink;
+        const isExactMatch = currentPath.endsWith(href) || (currentPath === '/' && (href === '/index.html' || href === './'));
+        const isCatalogActive = (currentPath.includes('catalog') || currentPath.includes('katalog')) && (href.includes('katalog') || href.includes('catalog'));
 
         if (isExactMatch || isCatalogActive) {
             link.classList.add('active', 'text-gold-accent');
             link.classList.remove('text-white/70');
-            
-            // Если это мобильное меню, там текст обычно чисто белый, если не активен
-            if (link.closest('#mobile-menu-dropdown')) {
-                link.classList.add('text-gold-accent');
-            }
         }
     });
 }
@@ -206,78 +185,52 @@ function updateBreadcrumbs() {
         'dostavka-i-oplata.html': 'Доставка',
         'o-kompanii.html': 'О компании',
         'kontakty.html': 'Контакты',
-        'politika-konfidencialnosti.html': 'Политика конфиденциальности',
-        'politika-obrabotki-cookie.html': 'Политика обработки файлов cookie',
-        'soglasie-na-reklamu.html': 'Согласие на рекламу',
-        '404.html': 'Ошибка 404',
-        // Страницы каталога
-        'doska-pola.html': 'Доска пола',
-        'imitaciya-brusa.html': 'Имитация бруса',
-        'krepezh.html': 'Крепеж',
-        'palubnaya-doska.html': 'Палубная доска',
-        'pilomaterialy.html': 'Пиломатериалы',
+        'vagonka.html': 'Вагонка',
         'planken.html': 'Планкен',
-        'pogonazh.html': 'Погонаж',
-        'vagonka.html': 'Вагонка'
+        'palubnaya-doska.html': 'Палубная доска'
     };
 
     const fullPath = window.location.pathname;
-    // Улучшенное извлечение имени файла
     let currentPage = fullPath.split("/").pop() || 'index.html';
     currentPage = currentPage.split('?')[0].trim();
 
-    // Скрываем на главной (корень или index.html)
     if (currentPage === 'index.html' || fullPath === '/') {
         breadcrumbContainer.classList.add('hidden');
     } else {
         breadcrumbContainer.classList.remove('hidden');
-        
-        // 1. Устанавливаем текст текущей страницы
         breadcrumbLabel.innerText = pageTitles[currentPage] || 'Страница';
 
-        // 2. Убираем старые динамические ссылки, чтобы они не дублировались при повторном вызове
         const oldDynamic = breadcrumbContainer.querySelectorAll('.dynamic-link');
         oldDynamic.forEach(el => el.remove());
 
-        // 3. Логика вложенности
-        // Проверяем вхождение папки /catalog/ в пути
         if (fullPath.includes('/catalog/') && currentPage !== 'katalog.html') {
             const catalogLink = document.createElement('span');
             catalogLink.className = 'dynamic-link flex items-center space-x-2'; 
-            
-            // Ссылка на каталог теперь всегда абсолютная (от корня)
             catalogLink.innerHTML = `
                 <a href="/katalog.html" class="text-gray-400 hover:text-primary-green transition-colors">Каталог</a>
                 <i class="fas fa-chevron-right text-[11px] text-gray-300 transform translate-y-[1.5px]"></i>
             `;
-            
             breadcrumbLabel.before(catalogLink);
         }
     }
 }
 
 /**
- * 6. ЛОГИКА МОДАЛЬНОГО ОКНА (Надежная версия)
+ * 6. ЛОГИКА МОДАЛЬНОГО ОКНА
  */
 function openCallbackModal(productName = null, isEmailMode = false) {
     const modal = document.getElementById('callback-modal');
     const content = document.getElementById('modal-content');
-    
-    if (!modal || !content) {
-        console.error("Ошибка: Модальное окно не найдено в DOM");
-        return;
-    }
+    if (!modal || !content) return;
 
     const titleElement = modal.querySelector('h3');
     const subjectInput = document.getElementById('form-subject');
 
-    // Сбрасываем форму
     document.getElementById('callbackForm')?.reset();
 
     let displayTitle = '';
     let emailSubject = '';
 
-    // Логика заголовка
     if (productName && productName.trim().length > 0 && productName.toLowerCase() !== 'заказать звонок') {
         let cleanName = productName.trim();
         cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1).toLowerCase();
@@ -291,12 +244,8 @@ function openCallbackModal(productName = null, isEmailMode = false) {
     if (titleElement) titleElement.innerHTML = displayTitle;
     if (subjectInput) subjectInput.value = emailSubject;
 
-    // Режим формы
-    if (typeof window.switchFormMode === 'function') {
-        window.switchFormMode(isEmailMode ? 'chat' : 'call');
-    }
+    window.switchFormMode(isEmailMode ? 'chat' : 'call');
 
-    // Показ
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
@@ -334,83 +283,18 @@ function initPhoneMask() {
 }
 
 /**
- * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
- */
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Загружаем обычные компоненты (ДОБАВЛЕН "/" В НАЧАЛЕ ПУТЕЙ)
-    loadComponent('header-top-res', '/components/header.html');
-    loadComponent('nav-res', '/components/nav.html');
-    loadComponent('breadcrumbs-res', '/components/breadcrumbs.html');
-    loadComponent('footer-res', '/components/footer.html');
-    loadComponent('callback-modal-res', '/components/zakaz-zvonka.html');
-
-    // 2. Большой каталог
-    if (document.getElementById('catalog-res')) {
-        // ИСПРАВЛЕНО: Теперь фильтр инициализируется ТОЛЬКО после загрузки HTML каталога
-        loadComponent('catalog-res', '/components/blok-kataloga.html').then(() => {
-            if (typeof initGalleryFilter === 'function') {
-                initGalleryFilter();
-            }
-        });
-    }
-
-    // 3. Компактный каталог
-    if (document.getElementById('catalog-sm-res')) {
-        loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html');
-    }
-
-    // 4. ЗАГРУЖАЕМ СЛАЙДЕР (ДОБАВЛЕН "/")
-    loadComponent('hero-slider-res', '/components/hero-slider.html').then(() => {
-        if (typeof Swiper !== 'undefined' && document.querySelector('.myHeroSwiper')) {
-            new Swiper(".myHeroSwiper", {
-                loop: true,
-                speed: 1200,
-                touchRatio: 2,
-                touchAngle: 45,
-                shortSwipes: true,
-                longSwipes: false,
-                grabCursor: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-            });
-        }
-    });
-
-    // Маска телефона
-    if (!document.querySelector('script[src*="inputmask"]')) {
-        const maskScript = document.createElement('script');
-        maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
-        maskScript.onload = initPhoneMask;
-        document.head.appendChild(maskScript);
-    }
-});
-
-/**
- * 9. ГЛОБАЛЬНЫЙ ОБРАБОТЧИК КЛИКОВ (ФИНАЛЬНАЯ ВЕРСИЯ)
+ * 8. ГЛОБАЛЬНЫЙ ОБРАБОТЧИК КЛИКОВ
  */
 document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.trigger-callback');
-    
     if (trigger) {
         const isMobile = window.innerWidth <= 768;
         const isPhoneLink = trigger.tagName === 'A' && trigger.getAttribute('href')?.startsWith('tel:');
 
-        // Если это не прямой звонок по ссылке на мобильном — открываем модалку
         if (!isMobile || (isMobile && !isPhoneLink)) {
             e.preventDefault();
             let productName = '';
 
-            // 1. Поиск в таблицах (для прайс-листов)
             const row = trigger.closest('tr');
             if (row) {
                 let prevRow = row.previousElementSibling;
@@ -424,54 +308,30 @@ document.addEventListener('click', (e) => {
                 }
                 if (!productName) {
                     const firstCell = row.querySelector('td:first-child');
-                    if (firstCell && firstCell.innerText.trim().length > 1) {
-                        productName = firstCell.innerText.trim();
-                    }
+                    if (firstCell) productName = firstCell.innerText.trim();
                 }
             }
 
-            // 2. Поиск в карточках товара (по заголовку h3)
             if (!productName) {
-                const card = trigger.closest('.product-card') || trigger.closest('.item-container') || trigger.closest('.p-5');
+                const card = trigger.closest('.product-card') || trigger.closest('.item-container');
                 const h3Title = card?.querySelector('h3');
                 if (h3Title) productName = h3Title.innerText.trim();
-            }
-
-            // 3. Если всё еще пусто — берем текст кнопки (фильтруем мусор)
-            if (!productName) {
-                const btnText = trigger.innerText.trim();
-                
-                // Фильтр 1: Если в тексте кнопки больше 5 цифр — это номер телефона (игнорируем)
-                const isPhoneNumber = btnText.replace(/\D/g, '').length > 5;
-                
-                // Фильтр 2: Если это стандартные фразы "Заказать звонок"
-                const boringTexts = ['заказать звонок', 'перезвоните мне', 'обратный звонок', 'связаться с нами'];
-                const isBoring = boringTexts.some(t => btnText.toLowerCase() === t.toLowerCase());
-
-                if (!isPhoneNumber && !isBoring) {
-                    productName = btnText; 
-                }
             }
 
             openCallbackModal(productName);
         }
     }
 
-    // --- Другие обработчики кликов ---
-    
-    // Анимация корзины
-    const buyBtn = e.target.closest('.buy-btn') || (e.target.closest('button') && e.target.innerText.toLowerCase().includes('корзину'));
-    if (buyBtn) animateCart();
-
-    // Закрытие модалки
-    const modal = document.getElementById('callback-modal');
-    if (modal && (e.target.closest('#close-modal') || e.target === modal)) {
+    if (e.target.closest('#close-modal') || e.target.id === 'callback-modal') {
         closeCallbackModal();
     }
+
+    const buyBtn = e.target.closest('.buy-btn') || (e.target.closest('button') && e.target.innerText.toLowerCase().includes('корзину'));
+    if (buyBtn) animateCart();
 });
 
 /**
- * 10. ОБРАБОТКА ОТПРАВКИ ФОРМЫ
+ * 9. ОТПРАВКА ФОРМЫ
  */
 document.addEventListener('submit', async (e) => {
     if (e.target && e.target.id === 'callbackForm') {
@@ -479,30 +339,20 @@ document.addEventListener('submit', async (e) => {
         const form = e.target;
         const btn = form.querySelector('button[type="submit"]');
         const originalBtnText = btn.innerText;
-        const formData = new FormData(form);
 
         try {
             btn.disabled = true;
             btn.innerText = 'ОТПРАВКА...';
-
-            // ИСПРАВЛЕНО: добавлен "/" перед названием файла
-            const response = await fetch('/send.php', {
-                method: 'POST',
-                body: formData
-            });
-
+            const response = await fetch('/send.php', { method: 'POST', body: new FormData(form) });
             const result = await response.text();
 
             if (result.trim() === 'success') {
-                alert('Спасибо! Заявка принята. Мы свяжемся с вами в ближайшее время.');
+                alert('Спасибо! Заявка принята.');
                 form.reset();
                 closeCallbackModal();
-            } else {
-                throw new Error('Ошибка сервера');
-            }
+            } else { throw new Error(); }
         } catch (error) {
-            alert('Произошла ошибка при отправке. Пожалуйста, позвоните нам по телефону.');
-            console.error('Ошибка отправки:', error);
+            alert('Ошибка отправки. Пожалуйста, позвоните нам.');
         } finally {
             btn.disabled = false;
             btn.innerText = originalBtnText;
@@ -511,61 +361,97 @@ document.addEventListener('submit', async (e) => {
 });
 
 /**
- * 11. ФИЛЬТРАЦИЯ ГАЛЕРЕИ (РАБОТЫ)
+ * 10. ГАЛЕРЕЯ И СЛАЙДЕР
  */
 function initGalleryFilter() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('.product-card');
-
     if (!filterButtons.length) return;
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
             const filterValue = button.getAttribute('data-filter');
             
             cards.forEach(card => {
                 const category = card.getAttribute('data-category');
+                const isMatch = filterValue === 'all' || category === filterValue;
+                card.classList.toggle('hidden', !isMatch);
                 const link = card.querySelector('a[data-fancybox]');
-                
-                if (filterValue === 'all' || category === filterValue) {
-                    card.classList.remove('hidden');
-                    if (link) link.setAttribute('data-fancybox', 'gallery');
-                } else {
-                    card.classList.add('hidden');
-                    if (link) link.setAttribute('data-fancybox', 'hidden');
-                }
+                if (link) link.setAttribute('data-fancybox', isMatch ? 'gallery' : 'hidden');
             });
         });
     });
 }
 
-/**
- * 12. ИНИЦИАЛИЗАЦИЯ FANCYBOX
- */
 function initFancybox() {
     if (typeof Fancybox !== "undefined") {
-        // Отвязываем старые события, если они были, чтобы не дублировать
         Fancybox.unbind('[data-fancybox="gallery"]');
-        Fancybox.bind('[data-fancybox="gallery"]', {
-            Hash: false,
-            Thumbs: { autoStart: false },
-            Toolbar: {
-                display: {
-                    left: ["infobar"],
-                    right: ["iterateZoom", "slideshow", "fullScreen", "download", "thumbs", "close"],
-                },
-            },
-            Carousel: { friction: 0.8 },
-            Images: { Panzoom: { maxScale: 3 } },
+        Fancybox.bind('[data-fancybox="gallery"]', { Hash: false, Thumbs: { autoStart: false } });
+    }
+}
+
+function initHeroSlider() {
+    const slider = document.querySelector('.myHeroSwiper');
+    if (slider && typeof Swiper !== 'undefined') {
+        new Swiper(".myHeroSwiper", {
+            loop: true,
+            speed: 1200,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
         });
     }
 }
 
-// Запуск при прямой загрузке страницы (если контент не динамический)
+/**
+ * ПЕРВАЯ ЗАГРУЗКА (Layout)
+ */
+let isInitialLoaded = false;
+
 document.addEventListener('DOMContentLoaded', () => {
-    initGalleryFilter();
-    initFancybox();
+    if (isInitialLoaded) return;
+    isInitialLoaded = true;
+
+    // 1. Грузим общие компоненты
+    Promise.all([
+        loadComponent('header-top-res', '/components/header.html'),
+        loadComponent('nav-res', '/components/nav.html'),
+        loadComponent('breadcrumbs-res', '/components/breadcrumbs.html'),
+        loadComponent('footer-res', '/components/footer.html'),
+        loadComponent('callback-modal-res', '/components/zakaz-zvonka.html')
+    ]).then(() => {
+        // 2. Проверяем, не находимся ли мы на главной
+        const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('index.html');
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Если это главная и НЕТ параметра ?load=, грузим слайдер/каталог
+        if (isIndex && !urlParams.has('load')) {
+            const mainLoads = [];
+            if (document.getElementById('hero-slider-res')) {
+                mainLoads.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
+            }
+            if (document.getElementById('catalog-sm-res')) {
+                mainLoads.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
+            }
+
+            Promise.all(mainLoads).then(() => {
+                initAllScripts();
+                if (window.AppRouter) window.AppRouter.init();
+            });
+        } else {
+            // Если мы на странице типа Доставка (или есть ?load=), просто запускаем роутер
+            initAllScripts();
+            if (window.AppRouter) window.AppRouter.init();
+        }
+    });
+
+    // Маска
+    if (!document.querySelector('script[src*="inputmask"]')) {
+        const maskScript = document.createElement('script');
+        maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
+        maskScript.onload = initPhoneMask;
+        document.head.appendChild(maskScript);
+    }
 });
