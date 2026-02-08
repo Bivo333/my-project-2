@@ -151,6 +151,7 @@ async function loadComponent(id, url) {
 function setActiveLink() {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.nav-link, #mobile-menu-dropdown a');
+    const cartBtn = document.getElementById('cart-button');
 
     navLinks.forEach(link => {
         link.classList.remove('active', 'text-gold-accent');
@@ -167,6 +168,19 @@ function setActiveLink() {
             link.classList.remove('text-white/70');
         }
     });
+
+    // 2. Логика для корзины (Акцентный фон и цвет текста)
+    if (cartBtn) {
+        // Сбрасываем активные стили (возвращаем прозрачный фон и белый текст)
+        cartBtn.classList.remove('bg-dark-green', 'text-gold-accent', 'px-3', 'py-2', 'rounded-xl');
+        cartBtn.classList.add('text-white');
+
+        // Если путь страницы содержит cart.html
+        if (currentPath.includes('cart.html')) {
+            cartBtn.classList.add('bg-dark-green', 'text-gold-accent', 'px-3', 'py-2', 'rounded-xl');
+            cartBtn.classList.remove('text-white');
+        }
+    }
 }
 
 /**
@@ -178,16 +192,31 @@ function updateBreadcrumbs() {
     if (!breadcrumbLabel || !breadcrumbContainer) return;
 
     const pageTitles = {
-        'index.html': 'Главная',
-        'katalog.html': 'Каталог',
-        'ceny.html': 'Цены',
-        'nashi-raboty.html': 'Галерея',
-        'dostavka-i-oplata.html': 'Доставка',
-        'o-kompanii.html': 'О компании',
-        'kontakty.html': 'Контакты',
-        'vagonka.html': 'Вагонка',
-        'planken.html': 'Планкен',
-        'palubnaya-doska.html': 'Палубная доска'
+    // Корень сайта
+    'index.html': 'Главная',
+    'cart.html': 'Корзина',
+    'katalog.html': 'Каталог',
+    'ceny.html': 'Цены',
+    'nashi-raboty.html': 'Галерея',
+    'dostavka-i-oplata.html': 'Доставка',
+    'o-kompanii.html': 'О компании',
+    'kontakty.html': 'Контакты',
+    '404.html': 'Страница не найдена',
+
+    // Юридические страницы
+    'politika-konfidencialnosti.html': 'Политика конфиденциальности',
+    'politika-obrabotki-cookie.html': 'Политика Cookie',
+    'soglasie-na-reklamu.html': 'Согласие на рекламу',
+
+    // Папка /catalog/
+    'doska-pola.html': 'Доска пола',
+    'imitaciya-brusa.html': 'Имитация бруса',
+    'krepezh.html': 'Крепеж',
+    'palubnaya-doska.html': 'Палубная доска',
+    'pilomaterialy.html': 'Пиломатериалы',
+    'planken.html': 'Планкен',
+    'pogonazh.html': 'Погонаж',
+    'vagonka.html': 'Вагонка'
     };
 
     const fullPath = window.location.pathname;
