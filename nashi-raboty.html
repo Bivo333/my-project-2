@@ -6,6 +6,10 @@
     <title>Примеры работ: террасы из палубной доски и фасады из планкена — МосЛиства</title>
     <meta name="description" content="Посмотрите наши объекты из лиственницы: фото террас, фасадов и заборов. Привезем такой же материал за 1 день!">
     <link rel="icon" type="image/webp" href="/images/ui/logo.webp">
+
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
@@ -28,12 +32,12 @@
         }
     </script>
 </head>
-<body class="bg-light-gray flex flex-col min-h-screen">
+<body class="bg-light-gray flex flex-col min-h-screen" data-barba="wrapper">
     <div id="header-top-res"></div>
     <div id="nav-res" class="sticky top-0 z-50"></div>
     <div id="breadcrumbs-res"></div>
 
-    <main class="py-2 md:pt-2 md:py-4">
+    <main class="py-2 md:pt-2 md:py-4" data-barba="container">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-4 md:mb-6 gap-6">

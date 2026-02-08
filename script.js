@@ -338,57 +338,34 @@ function initPhoneMask() {
 /**
  * 8. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
  */
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Загружаем обычные компоненты (ДОБАВЛЕН "/" В НАЧАЛЕ ПУТЕЙ)
-    loadComponent('header-top-res', '/components/header.html');
-    loadComponent('nav-res', '/components/nav.html');
-    loadComponent('breadcrumbs-res', '/components/breadcrumbs.html');
-    loadComponent('footer-res', '/components/footer.html');
-    loadComponent('callback-modal-res', '/components/zakaz-zvonka.html');
+document.addEventListener('DOMContentLoaded', async () => {
+    // Собираем все компоненты, которые нужно загрузить
+    const tasks = [
+        loadComponent('header-top-res', '/components/header.html'),
+        loadComponent('nav-res', '/components/nav.html'),
+        loadComponent('breadcrumbs-res', '/components/breadcrumbs.html'),
+        loadComponent('footer-res', '/components/footer.html'),
+        loadComponent('callback-modal-res', '/components/zakaz-zvonka.html')
+    ];
 
-    // 2. Большой каталог
+    // Добавляем специфичные блоки, если они есть на странице
     if (document.getElementById('catalog-res')) {
-        // ИСПРАВЛЕНО: Теперь фильтр инициализируется ТОЛЬКО после загрузки HTML каталога
-        loadComponent('catalog-res', '/components/blok-kataloga.html').then(() => {
-            if (typeof initGalleryFilter === 'function') {
-                initGalleryFilter();
-            }
-        });
+        tasks.push(loadComponent('catalog-res', '/components/blok-kataloga.html'));
     }
-
-    // 3. Компактный каталог
     if (document.getElementById('catalog-sm-res')) {
-        loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html');
+        tasks.push(loadComponent('catalog-sm-res', '/components/blok-kataloga-sm.html'));
+    }
+    if (document.getElementById('hero-slider-res')) {
+        tasks.push(loadComponent('hero-slider-res', '/components/hero-slider.html'));
     }
 
-    // 4. ЗАГРУЖАЕМ СЛАЙДЕР (ДОБАВЛЕН "/")
-    loadComponent('hero-slider-res', '/components/hero-slider.html').then(() => {
-        if (typeof Swiper !== 'undefined' && document.querySelector('.myHeroSwiper')) {
-            new Swiper(".myHeroSwiper", {
-                loop: true,
-                speed: 1200,
-                touchRatio: 2,
-                touchAngle: 45,
-                shortSwipes: true,
-                longSwipes: false,
-                grabCursor: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-            });
-        }
-    });
+    // Ждем выполнения всех загрузок
+    await Promise.all(tasks);
 
-    // Маска телефона
+    // Когда всё подгрузилось — запускаем скрипты (включая слайдер)
+    initAllScripts();
+
+    // Загрузка маски (если её еще нет в системе)
     if (!document.querySelector('script[src*="inputmask"]')) {
         const maskScript = document.createElement('script');
         maskScript.src = "https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js";
@@ -559,3 +536,74 @@ document.addEventListener('DOMContentLoaded', () => {
     initGalleryFilter();
     initFancybox();
 });
+
+/**
+ * 13. ИНИЦИАЛИЗАЦИЯ ВСЕХ КОМПОНЕНТОВ (для Barba.js и первого входа)
+ */
+function initAllScripts() {
+    // 1. Базовые функции интерфейса
+    updateBreadcrumbs();
+    setActiveLink();
+    initMobileMenu();
+    initPhoneMask(); // Твоя маска телефона
+    initGalleryFilter();
+    initFancybox();
+    
+    // 2. Твой Swiper со всеми настройками (из старого 8-го блока)
+    if (typeof Swiper !== 'undefined' && document.querySelector('.myHeroSwiper')) {
+        new Swiper(".myHeroSwiper", {
+            loop: true,
+            speed: 1200,
+            touchRatio: 2,
+            touchAngle: 45,
+            shortSwipes: true,
+            longSwipes: false,
+            grabCursor: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    }
+}
+
+/**
+ * 14. ЛОГИКА BARBA.JS
+ */
+if (typeof barba !== 'undefined') {
+    barba.init({
+        transitions: [{
+            name: 'fade-transition',
+            // Уходим со старой страницы
+            async leave(data) {
+                return gsap.to(data.current.container, {
+                    opacity: 0,
+                    duration: 0.3
+                });
+            },
+            // Приходим на новую страницу
+            async enter(data) {
+                // Скроллим в самый верх
+                window.scrollTo(0, 0);
+                
+                // Анимация появления
+                gsap.from(data.next.container, {
+                    opacity: 0,
+                    duration: 0.3
+                });
+
+                // САМОЕ ВАЖНОЕ: запускаем скрипты для нового контента
+                // Это оживит слайдер и маску на новой странице
+                initAllScripts();
+            }
+        }]
+    });
+}

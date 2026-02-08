@@ -7,6 +7,10 @@
     <title>Изделия из лиственницы от производителя: палубная доска, планкен, вагонка — МосЛиства</title>
     <meta name="description" content="У нас Вы можете купить изделия из лиственницы: палубную доску, планкен и вагонку с доставкой по Москве и МО.">
     <link rel="icon" type="/image/png" href="/images/ui/logo.webp">
+
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -29,20 +33,17 @@
     </script>
 </head>
 
-<body class="bg-light-gray flex flex-col min-h-screen">
+<body class="bg-light-gray flex flex-col min-h-screen" data-barba="wrapper">
     <div id="header-top-res"></div>
     <div id="nav-res" class="sticky top-0 z-50"></div>
-
     <div id="breadcrumbs-res"></div>
 
-    <main>
-        <div id="hero-slider-res"></div>
-    
+    <main data-barba="container">
+        <div id="hero-slider-res"></div>    
         <div id="catalog-sm-res"></div>
     </main>
 
     <div id="footer-res"></div>
-
     <div id="callback-modal-res"></div>
 
     <script src="/script.js"></script>
